@@ -7,5 +7,8 @@ build_linux:
   stage: build
   image: debian:stable
   script:
-    - echo "try to build something on linux"
-    - echo "success"
+    - apt update
+    - apt install -y gcc g++ clang-format
+    - clang-format --version
+    - gcc --version
+    - g++ --version
