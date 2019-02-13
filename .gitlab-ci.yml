@@ -3,7 +3,7 @@ stages:
 
 # Linux build
 build_linux:
-  image: ubuntu:18.04
+  image: alpine
   script:
     - apt update
     - apt install -y make
