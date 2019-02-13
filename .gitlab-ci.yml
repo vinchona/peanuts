@@ -1,10 +1,8 @@
 # Define stages wich are to be executed
 stages:
-  - build
 
 # Linux build
 build_linux:
-  stage: build
   image: ubuntu:18.04
   script:
     - apt update
@@ -17,3 +15,17 @@ build_linux:
     - clang --version
     - clang++ --version
     - clang-format --version
+
+# Code quality
+codequality:
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+    - docker:dind
+  script:
+    - docker pull codeclimate/codeclimate
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate init
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > codeclimate.json
+  artifacts:
+    paths: [codeclimate.json]
