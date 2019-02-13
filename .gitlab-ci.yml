@@ -11,7 +11,7 @@ build_linux:
     - apt install -y gcc g++
     - gcc --version
     - g++ --version
-    - apt install -y clang clang++ clang-format
+    - apt install -y clang clang-format
     - clang --version
     - clang++ --version
     - clang-format --version
@@ -25,7 +25,6 @@ codequality:
     - docker:dind
   script:
     - docker pull codeclimate/codeclimate
-    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate init
     - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > codeclimate.json
   artifacts:
     paths: [codeclimate.json]
