@@ -1,0 +1,8 @@
+# Define stages wich are to be executed
+stages:
+  - build
+
+# Linux build
+build_linux:
+  stage: build
+  image: debian:stable
