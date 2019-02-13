@@ -6,3 +6,6 @@ stages:
 build_linux:
   stage: build
   image: debian:stable
+  script:
+    - echo "try to build something on linux"
+    - echo "success"
