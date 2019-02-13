@@ -5,10 +5,15 @@ stages:
 # Linux build
 build_linux:
   stage: build
-  image: debian:stable
+  image: ubuntu:18.04
   script:
     - apt update
-    - apt install -y gcc g++ clang-format
-    - clang-format --version
+    - apt install -y make
+    - make --version
+    - apt install -y gcc g++
     - gcc --version
     - g++ --version
+    - apt install -y clang clang++ clang-format
+    - clang --version
+    - clang++ --version
+    - clang-format --version
