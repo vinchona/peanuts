@@ -1,20 +1,26 @@
 # Define stages wich are to be executed
 stages:
 
-# Linux build
-build_linux:
-  image: ubuntu:18.04
+
+# Use the official gcc image, based on debian (see https://hub.docker.com/_/gcc/)
+image: gcc
+
+# Build
+build:
+  stage: build
   script:
     - apt update
     - apt install -y make
-    - make --version
-    - apt install -y gcc g++
-    - gcc --version
-    - g++ --version
-    - apt install -y clang clang-format
-    - clang --version
-    - clang++ --version
-    - clang-format --version
+    - make BIN=bin
+  artifacts:
+    paths:
+    - bin
+
+# Run
+run:
+  stage: run
+  script:
+    - ./run.sh
 
 # Code quality
 code_quality:
