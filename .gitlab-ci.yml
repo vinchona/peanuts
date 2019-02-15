@@ -9,8 +9,9 @@ image: gcc
 build:
   stage: build
   before_script:
-    - apt update
-    - apt install -y make
+    - apt-get update
+    - apt-get upgrade -y
+    - apt-get install -y make
   script:
     - make BIN=bin
   artifacts:
