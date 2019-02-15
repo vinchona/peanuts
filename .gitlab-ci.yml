@@ -16,9 +16,9 @@ build:
     paths:
     - bin
 
-# Run
-run:
-  stage: run
+# Test
+test:
+  stage: test
   script:
     - ./run.sh
 
