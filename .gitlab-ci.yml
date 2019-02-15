@@ -8,9 +8,10 @@ image: gcc
 # Build
 build:
   stage: build
-  script:
+  before_script:
     - apt update
     - apt install -y make
+  script:
     - make BIN=bin
   artifacts:
     paths:
