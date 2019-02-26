@@ -1,3 +1,4 @@
+#include "peanuts.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>

@@ -8,7 +8,8 @@ all: true_all
 
 BIN?=bin
 
-SRCS=$(this)/srcs
+SRCS:=$(this)/srcs
+INCLUDE:=$(this)/include
 
 include $(this)/build.mk
 -include $(this)/$(SRCS)/peanuts.mk
