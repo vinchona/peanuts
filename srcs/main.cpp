@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 using namespace std;
+using namespace peanuts;
 
 #define MAYBE_UNUSED(var) (void)(var)
 

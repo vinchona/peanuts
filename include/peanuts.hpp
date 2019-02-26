@@ -3,7 +3,7 @@
 #ifndef PEANUTS_HPP
 #define PEANUTS_HPP
 
-namespace Peanuts
+namespace peanuts
 {
 }
 
