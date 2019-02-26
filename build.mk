@@ -10,8 +10,8 @@ endif
 
 $(BIN)/%.cpp.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(QUIET)$(CXX) $(CFLAGS) $(INCLUDES) -std=c++11 -o $@ -c $<
-	@$(CXX) -MM "$<" -MT "$@" -o "$(BIN)/$*_cpp.deps" $(INCLUDES) $(CFLAGS) -std=c++11
+	$(QUIET)$(CXX) $(CFLAGS) $(INCLUDES) -std=c++14 -o $@ -c $<
+	@$(CXX) -MM "$<" -MT "$@" -o "$(BIN)/$*_cpp.deps" $(INCLUDES) $(CFLAGS) -std=c++14
 	@echo "CXX $< $(ECHO_OUTPUT)"
 
 $(BIN)/%.c.o: %.c
