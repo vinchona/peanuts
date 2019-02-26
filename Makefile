@@ -12,7 +12,7 @@ SRCS:=$(this)/srcs
 INCLUDE:=$(this)/include
 
 include $(this)/build.mk
--include $(this)/$(SRCS)/peanuts.mk
+include $(this)/$(SRCS)/peanuts.mk
 
 CFLAGS+=-Wall
 CFLAGS+=-Wextra
