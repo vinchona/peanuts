@@ -1,4 +1,4 @@
 #include <iostream>
 #include <peanuts.hpp>
 
-unittest("This is a description") {}
+PEANUTS_UNITTEST("This is a description") {}

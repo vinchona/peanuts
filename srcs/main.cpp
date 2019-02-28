@@ -14,9 +14,9 @@ static void safe_main(int arg_count, char* arg_value[])
 {
   MAYBE_UNUSED(arg_count);
   MAYBE_UNUSED(arg_value);
-  auto count = Unittests::instance().add(test, "Adding test width Unittests::add API");
+  auto count = Peanuts::instance().add(test, "Adding test width Unittests::add API");
   std::cout << "We have " << count << " unittests" << std::endl;
-  Unittests::instance().execute();
+  Peanuts::instance().execute();
   return;
 }
 

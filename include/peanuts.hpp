@@ -9,44 +9,44 @@
 namespace peanuts
 {
 
-#define CONCATENATES2(a, b) a##b
-#define CONCATENATES(a, b) CONCATENATES2(a, b)
-
-struct Unittests
+struct Peanuts
 {
 
-  Unittests(Unittests const&) = delete;
-  Unittests& operator=(Unittests const&) = delete;
-  Unittests(Unittests&&) = delete;
-  Unittests& operator=(Unittests&&) = delete;
+  Peanuts(Peanuts const&) = delete;
+  Peanuts& operator=(Peanuts const&) = delete;
+  Peanuts(Peanuts&&) = delete;
+  Peanuts& operator=(Peanuts&&) = delete;
   static auto& instance()
   {
-    static peanuts::Unittests unittests{};
-    return unittests;
+    static peanuts::Peanuts peanuts{};
+    return peanuts;
   }
 
   int add(std::function<void(void)> function, char const* description);
   void execute();
 
 private:
-  Unittests() = default; // Disallow instantion outside of the class
-  struct Tests
+  Peanuts() = default;
+  struct Test
   {
     std::function<void(void)> function;
     char const* description;
   };
-  std::vector<Tests> tests;
+  std::vector<Test> tests;
   int count = 0;
 };
 
-#define unittest_with_suffix(description, suffix)                                                                      \
-  static void CONCATENATES(unittest_function, suffix)();                                                               \
-  static auto CONCATENATES(execute_, suffix) =                                                                         \
-      peanuts::Unittests::instance().add(CONCATENATES(unittest_function, suffix), description);                        \
-  static void CONCATENATES(unittest_function, suffix)()
-
-#define unittest(description) unittest_with_suffix(description, __LINE__)
-
 } // namespace peanuts
+
+#define PEANUTS_CONCATENATES2(a, b) a##b
+#define PEANUTS_CONCATENATES(a, b) PEANUTS_CONCATENATES2(a, b)
+
+#define PEANUTS_DECLARE_AND_MAKE_UNIQUE(description, suffix)                                                           \
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)();                                                  \
+  static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
+      peanuts::Peanuts::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);             \
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)()
+
+#define PEANUTS_UNITTEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE(description, __LINE__)
 
 #endif /* __PEANUTS__ */

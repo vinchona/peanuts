@@ -4,14 +4,14 @@
 #include <iostream>
 #include <vector>
 
-int peanuts::Unittests::add(std::function<void(void)> function, char const* description)
+int peanuts::Peanuts::add(std::function<void(void)> function, char const* description)
 {
-  Tests test = {function, description};
+  Test test = {function, description};
   tests.push_back(test);
   return ++count;
 }
 
-void peanuts::Unittests::execute()
+void peanuts::Peanuts::execute()
 {
   for (auto const& test : tests)
   {
