@@ -6,6 +6,8 @@ PEANUTS_TARGET:=$(PEANUTS_NAME:%.exe=%)
 
 PEANUTS_SRCS:=\
 	$(this.peanuts)/main.cpp\
+	$(this.peanuts)/peanuts.cpp\
+	$(this.peanuts)/example.cpp\
 
 PEANUTS_OBJS:=\
 	$(PEANUTS_SRCS:%=$(BIN)/%.o)
