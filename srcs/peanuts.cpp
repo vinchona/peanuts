@@ -8,8 +8,10 @@ int peanuts::Peanuts::add(std::function<void(void)> function, char const* descri
 {
   Test test = {function, description};
   tests.push_back(test);
-  return ++count;
+  return tests.size() - 1;
 }
+
+int peanuts::Peanuts::count() { return tests.size(); }
 
 void peanuts::Peanuts::execute()
 {

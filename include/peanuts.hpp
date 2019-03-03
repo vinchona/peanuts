@@ -23,6 +23,7 @@ struct Peanuts
   }
 
   int add(std::function<void(void)> function, char const* description);
+  int count();
   void execute();
 
 private:
@@ -33,7 +34,6 @@ private:
     char const* description;
   };
   std::vector<Test> tests;
-  int count = 0;
 };
 
 } // namespace peanuts
