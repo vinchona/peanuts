@@ -15,9 +15,10 @@ static void safe_main(int arg_count, char* arg_value[])
 {
   MAYBE_UNUSED(arg_count);
   MAYBE_UNUSED(arg_value);
-  test_id = Peanuts::instance().add(test, "Adding test width Unittests::add API");
-  std::cout << "You have " << Peanuts::instance().count() << " unittests" << std::endl;
-  Peanuts::instance().execute();
+  test_id = Peanuts::instance().add_unittest(test, "Adding test with Unittests::add API");
+  std::cout << "You have " << Peanuts::instance().count_unittests() << " unittests" << std::endl;
+  Peanuts::instance().execute_unittests();
+  Peanuts::instance().execute_fuzztests();
   return;
 }
 
