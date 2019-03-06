@@ -1,7 +1,7 @@
 #include <peanuts.hpp>
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 PEANUTS_UNITTEST("Adding test description") { std::cout << "Executing unittest" << std::endl; }
 

@@ -1,11 +1,11 @@
 #include "peanuts.hpp"
 
+#include <climits>
 #include <cstring>
 #include <functional>
 #include <iostream>
-#include <vector>
 #include <random>
-#include <climits>
+#include <vector>
 
 int peanuts::Peanuts::add_unittest(std::function<void(void)> function, char const* description)
 {
@@ -44,10 +44,10 @@ void peanuts::Peanuts::execute_fuzztests()
       std::mt19937 size_generator{seed};
       std::uniform_int_distribution<> size_distribution{INT_MIN, INT_MAX};
       char length = size_distribution(size_generator);
-      std::string data {};
+      std::string data{};
       std::mt19937 random_value{length};
       std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
-      for(char value = 0; value < length; value++)
+      for (char value = 0; value < length; value++)
         data += std::string{distribution(random_value)};
       test.function(data.c_str(), data.length());
     }
