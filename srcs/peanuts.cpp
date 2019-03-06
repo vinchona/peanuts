@@ -4,6 +4,8 @@
 #include <functional>
 #include <iostream>
 #include <vector>
+#include <random>
+#include <climits>
 
 int peanuts::Peanuts::add_unittest(std::function<void(void)> function, char const* description)
 {
@@ -37,6 +39,17 @@ void peanuts::Peanuts::execute_fuzztests()
   for (auto const& test : fuzztests)
   {
     std::cout << test.description << std::endl;
-    test.function("fuzzed data", strlen("fuzzed data") + 1);
+    for (unsigned int seed = 0; seed < 1000; seed++)
+    {
+      std::mt19937 size_generator{seed};
+      std::uniform_int_distribution<> size_distribution{INT_MIN, INT_MAX};
+      char length = size_distribution(size_generator);
+      std::string data {};
+      std::mt19937 random_value{length};
+      std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
+      for(char value = 0; value < length; value++)
+        data += std::string{distribution(random_value)};
+      test.function(data.c_str(), data.length());
+    }
   }
 }
