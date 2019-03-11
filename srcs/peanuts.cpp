@@ -39,7 +39,7 @@ void peanuts::Peanuts::execute_fuzztests()
   for (auto const& test : fuzztests)
   {
     std::cout << test.description << std::endl;
-    for (unsigned int seed = 0; seed < 1000; seed++)
+    for (size_t seed = 0; seed < 1000; seed++)
     {
       std::mt19937 size_generator{seed};
       std::uniform_int_distribution<> size_distribution{INT_MIN, INT_MAX};
