@@ -3,7 +3,6 @@
 #ifndef PEANUTS_HPP
 #define PEANUTS_HPP
 
-#include <exception>
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -63,20 +62,8 @@ private:
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
                                                                    size_t peanuts_fuzz_size);                          \
-  static void PEANUTS_CONCATENATES(peanut_try_catch_unique_function, suffix)(char const* peanuts_fuzz_data,            \
-                                                                             size_t peanuts_fuzz_size)                 \
-  {                                                                                                                    \
-    try                                                                                                                \
-    {                                                                                                                  \
-      PEANUTS_CONCATENATES(peanut_unique_function, suffix)(peanuts_fuzz_data, peanuts_fuzz_size);                      \
-    }                                                                                                                  \
-    catch (std::exception const& error)                                                                                \
-    {                                                                                                                  \
-      std::cerr << error.what() << std::endl;                                                                          \
-    }                                                                                                                  \
-  }                                                                                                                    \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) = peanuts::Peanuts::instance().add_fuzztest(               \
-      PEANUTS_CONCATENATES(peanut_try_catch_unique_function, suffix), description);                                    \
+      PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);                                    \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
                                                                    size_t peanuts_fuzz_size)
 

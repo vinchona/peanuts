@@ -6,6 +6,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <exception>
 
 int peanuts::Peanuts::add_unittest(std::function<void(void)> function, char const* description)
 {
@@ -49,7 +50,15 @@ void peanuts::Peanuts::execute_fuzztests()
       std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
       for (char value = 0; value < length; value++)
         data += std::string{distribution(random_value)};
-      test.function(data.c_str(), data.length());
+
+      try
+      {
+        test.function(data.c_str(), data.length());
+      }
+      catch(std::exception const& exception)
+      {
+        std::cerr << exception.what() << std::endl;
+      }
     }
   }
 }
