@@ -50,7 +50,17 @@ struct Fuzzer
 
   int add(std::function<void(char const*, size_t)> function, char const* description);
   int count();
-  void execute();
+
+  enum struct Combinatorial
+  {
+    random,
+    combination_with_repetitions,
+    combination_without_repetitions,
+    permutation_with_repetitions,
+    permutation_without_repetitions,
+  };
+
+  void execute(Combinatorial combinatorial);
 
 private:
   Fuzzer() = default;

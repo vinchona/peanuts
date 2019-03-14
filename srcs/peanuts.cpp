@@ -35,8 +35,9 @@ int peanuts::Fuzzer::add(std::function<void(char const*, size_t)> function, char
 
 int peanuts::Fuzzer::count() { return tests.size(); }
 
-void peanuts::Fuzzer::execute()
+void peanuts::Fuzzer::execute(Combinatorial combinatorial)
 {
+  (void)combinatorial;
   for (auto const& test : tests)
   {
     std::cout << test.description << std::endl;

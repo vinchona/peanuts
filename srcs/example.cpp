@@ -3,11 +3,11 @@
 #include <cassert>
 #include <iostream>
 
-PEANUTS_UNITTEST("Adding test description") { std::cout << "Executing unittest" << std::endl; }
+PEANUTS_TEST("Adding test description") { std::cout << "Executing unittest" << std::endl; }
 
-PEANUTS_UNITTEST("Adding other test description") { std::cout << "Executing other unittest" << std::endl; }
+PEANUTS_TEST("Adding other test description") { std::cout << "Executing other unittest" << std::endl; }
 
-PEANUTS_FUZZTEST("Adding fuzz decription")
+PEANUTS_FUZZ("Adding fuzz decription")
 {
   static int count = 0;
   std::cout << "Executing fuzz test[" << count << "]" << std::endl;
