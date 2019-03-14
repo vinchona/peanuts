@@ -2,11 +2,11 @@
 
 #include <climits>
 #include <cstring>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <random>
 #include <vector>
-#include <exception>
 
 int peanuts::Tester::add(std::function<void(void)> function, char const* description)
 {
@@ -56,7 +56,7 @@ void peanuts::Fuzzer::execute(Combinatorial combinatorial)
       {
         test.function(data.length(), data.c_str());
       }
-      catch(std::exception const& exception)
+      catch (std::exception const& exception)
       {
         std::cerr << exception.what() << std::endl;
       }

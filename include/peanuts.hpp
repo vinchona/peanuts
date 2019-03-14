@@ -81,16 +81,16 @@ private:
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void);                                              \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
-      peanuts::Tester::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);    \
+      peanuts::Tester::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);              \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void)
 
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \
-  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size, \
-		  						   char const* peanuts_fuzz_data);                      \
-  static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) = peanuts::Fuzzer::instance().add(               \
-      PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);                                    \
-  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size, \
-		  						   char const* peanuts_fuzz_data)
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size,                           \
+                                                                   char const* peanuts_fuzz_data);                     \
+  static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
+      peanuts::Fuzzer::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);              \
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size,                           \
+                                                                   char const* peanuts_fuzz_data)
 
 #define PEANUTS_TEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
 #define PEANUTS_FUZZ(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
