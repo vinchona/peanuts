@@ -4,7 +4,6 @@
 #define PEANUTS_HPP
 
 #include <functional>
-#include <iostream>
 #include <vector>
 
 namespace peanuts
