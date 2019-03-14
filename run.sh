@@ -1,5 +1,10 @@
 #!/bin/bash
 
 ./scripts/reformat.sh
-./bin/peanuts.exe
+
+./bin/tester.exe
 echo $?
+
+./bin/fuzzer.exe
+echo $?
+

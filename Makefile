@@ -12,7 +12,8 @@ SRCS:=$(this)/srcs
 INCLUDE:=$(this)/include
 
 include $(this)/build.mk
-include $(this)/$(SRCS)/peanuts.mk
+include $(this)/$(SRCS)/tester.mk
+include $(this)/$(SRCS)/fuzzer.mk
 
 CFLAGS+=-Wall
 CFLAGS+=-Wextra

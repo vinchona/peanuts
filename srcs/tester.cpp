@@ -6,7 +6,7 @@
 using namespace std;
 using namespace peanuts;
 
-#define MAYBE_UNUSED(var) (void)(var)
+#define MAYBE_UNUSED(variable) (void)(variable)
 
 static int test_id = 0;
 static void test(void) { std::cout << "Test[" << test_id << "]: Add API" << std::endl; }
@@ -18,7 +18,6 @@ static void safe_main(int arg_count, char* arg_value[])
   test_id = Tester::instance().add(test, "Adding test with Unittests::add API");
   std::cout << "You have " << Tester::instance().count() << " unittests" << std::endl;
   Tester::instance().execute();
-  Fuzzer::instance().execute(Fuzzer::Combinatorial::random);
   return;
 }
 
