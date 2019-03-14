@@ -26,7 +26,7 @@ void peanuts::Tester::execute()
   }
 }
 
-int peanuts::Fuzzer::add(std::function<void(char const*, size_t)> function, char const* description)
+int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
 {
   Test test = {function, description};
   tests.push_back(test);
@@ -54,7 +54,7 @@ void peanuts::Fuzzer::execute(Combinatorial combinatorial)
 
       try
       {
-        test.function(data.c_str(), data.length());
+        test.function(data.length(), data.c_str());
       }
       catch(std::exception const& exception)
       {

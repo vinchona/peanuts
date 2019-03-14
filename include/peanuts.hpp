@@ -47,7 +47,7 @@ struct Fuzzer
     return peanuts;
   }
 
-  int add(std::function<void(char const*, size_t)> function, char const* description);
+  int add(std::function<void(size_t, char const*)> function, char const* description);
   int count();
 
   enum struct Combinatorial
@@ -66,7 +66,7 @@ private:
 
   struct Test
   {
-    std::function<void(char const*, size_t)> function;
+    std::function<void(size_t, char const*)> function;
     char const* description;
   };
 
@@ -85,12 +85,12 @@ private:
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void)
 
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \
-  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
-                                                                   size_t peanuts_fuzz_size);                          \
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size, \
+		  						   char const* peanuts_fuzz_data);                      \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) = peanuts::Fuzzer::instance().add(               \
       PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);                                    \
-  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
-                                                                   size_t peanuts_fuzz_size)
+  static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size, \
+		  						   char const* peanuts_fuzz_data)
 
 #define PEANUTS_TEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
 #define PEANUTS_FUZZ(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
