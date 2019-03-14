@@ -10,42 +10,58 @@
 namespace peanuts
 {
 
-struct Peanuts
+struct Tester
 {
-
-  Peanuts(Peanuts const&) = delete;
-  Peanuts& operator=(Peanuts const&) = delete;
-  Peanuts(Peanuts&&) = delete;
-  Peanuts& operator=(Peanuts&&) = delete;
+  Tester(Tester const&) = delete;
+  Tester& operator=(Tester const&) = delete;
+  Tester(Tester&&) = delete;
+  Tester& operator=(Tester&&) = delete;
   static auto& instance()
   {
-    static peanuts::Peanuts peanuts{};
+    static peanuts::Tester peanuts{};
     return peanuts;
   }
 
-  int add_unittest(std::function<void(void)> function, char const* description);
-  int count_unittests();
-  void execute_unittests();
-
-  int add_fuzztest(std::function<void(char const*, size_t)> function, char const* description);
-  int count_fuzztests();
-  void execute_fuzztests();
+  int add(std::function<void(void)> function, char const* description);
+  int count();
+  void execute();
 
 private:
-  Peanuts() = default;
-  struct UnitTest
+  Tester() = default;
+  struct Test
   {
     std::function<void(void)> function;
     char const* description;
   };
-  struct FuzzTest
+  std::vector<Test> tests;
+};
+
+struct Fuzzer
+{
+  Fuzzer(Fuzzer const&) = delete;
+  Fuzzer& operator=(Fuzzer const&) = delete;
+  Fuzzer(Fuzzer&&) = delete;
+  Fuzzer& operator=(Fuzzer&&) = delete;
+  static auto& instance()
+  {
+    static peanuts::Fuzzer peanuts{};
+    return peanuts;
+  }
+
+  int add(std::function<void(char const*, size_t)> function, char const* description);
+  int count();
+  void execute();
+
+private:
+  Fuzzer() = default;
+
+  struct Test
   {
     std::function<void(char const*, size_t)> function;
     char const* description;
   };
 
-  std::vector<UnitTest> unittests;
-  std::vector<FuzzTest> fuzztests;
+  std::vector<Test> tests;
 };
 
 } // namespace peanuts
@@ -56,18 +72,18 @@ private:
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void);                                              \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
-      peanuts::Peanuts::instance().add_unittest(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);    \
+      peanuts::Tester::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);    \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void)
 
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
                                                                    size_t peanuts_fuzz_size);                          \
-  static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) = peanuts::Peanuts::instance().add_fuzztest(               \
+  static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) = peanuts::Fuzzer::instance().add(               \
       PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);                                    \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(char const* peanuts_fuzz_data,                      \
                                                                    size_t peanuts_fuzz_size)
 
-#define PEANUTS_UNITTEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
-#define PEANUTS_FUZZTEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
+#define PEANUTS_TEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
+#define PEANUTS_FUZZ(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
 
 #endif /* __PEANUTS__ */

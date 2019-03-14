@@ -8,36 +8,36 @@
 #include <vector>
 #include <exception>
 
-int peanuts::Peanuts::add_unittest(std::function<void(void)> function, char const* description)
+int peanuts::Tester::add(std::function<void(void)> function, char const* description)
 {
-  UnitTest unittest = {function, description};
-  unittests.push_back(unittest);
-  return unittests.size() - 1;
+  Test test = {function, description};
+  tests.push_back(test);
+  return tests.size() - 1;
 }
 
-int peanuts::Peanuts::count_unittests() { return unittests.size(); }
+int peanuts::Tester::count() { return tests.size(); }
 
-void peanuts::Peanuts::execute_unittests()
+void peanuts::Tester::execute()
 {
-  for (auto const& test : unittests)
+  for (auto const& test : tests)
   {
     std::cout << test.description << std::endl;
     test.function();
   }
 }
 
-int peanuts::Peanuts::add_fuzztest(std::function<void(char const*, size_t)> function, char const* description)
+int peanuts::Fuzzer::add(std::function<void(char const*, size_t)> function, char const* description)
 {
-  FuzzTest fuzztest = {function, description};
-  fuzztests.push_back(fuzztest);
-  return fuzztests.size() - 1;
+  Test test = {function, description};
+  tests.push_back(test);
+  return tests.size() - 1;
 }
 
-int peanuts::Peanuts::count_fuzztests() { return fuzztests.size(); }
+int peanuts::Fuzzer::count() { return tests.size(); }
 
-void peanuts::Peanuts::execute_fuzztests()
+void peanuts::Fuzzer::execute()
 {
-  for (auto const& test : fuzztests)
+  for (auto const& test : tests)
   {
     std::cout << test.description << std::endl;
     for (size_t seed = 0; seed < 1000; seed++)
