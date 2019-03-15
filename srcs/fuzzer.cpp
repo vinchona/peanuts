@@ -17,7 +17,7 @@ static void safe_main(int arg_count, char* arg_value[])
   MAYBE_UNUSED(arg_value);
   test_id = Fuzzer::instance().add(test, "Adding test with Unittests::add API");
   std::cout << "You have " << Fuzzer::instance().count() << " unittests" << std::endl;
-  Fuzzer::instance().execute(Fuzzer::Combinatorial::random);
+  Fuzzer::instance().execute(1, Fuzzer::Combinatorial::random, 2);
   return;
 }
 

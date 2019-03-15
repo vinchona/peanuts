@@ -35,40 +35,33 @@ int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char
 
 int peanuts::Fuzzer::count() { return tests.size(); }
 
-static std::string generate_random(size_t seed, size_t size_max)
+void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
+{
+  for (size_t trial = 0; trial < trials; trial++)
+  {
+    switch(combinatorial)
+    {
+      case Combinatorial::random: execute_random(trial, size); break;
+      default: execute_dummy(); break;
+    }
+  }
+}
+
+void peanuts::Fuzzer::execute_random(size_t seed, size_t size_max)
 {
   std::mt19937 size_generator{seed};
   std::uniform_int_distribution<size_t> size_distribution{0, size_max};
   size_t length = size_distribution(size_generator);
-  std::cout << length << std::endl;
   std::string data{};
   std::mt19937 random_value{length};
   std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
   for (size_t value = 0; value < length; value++)
     data += std::string{distribution(random_value)};
-  return data;
-}
-
-static std::string generate_empty_string(size_t, size_t) { return std::string{}; }
-
-void peanuts::Fuzzer::execute(Combinatorial combinatorial)
-{
-  std::function<std::string(size_t, size_t)> generate_data = generate_empty_string;
-
-  if (combinatorial == Combinatorial::random)
-    generate_data = generate_random;
-
-  size_t size_max = UCHAR_MAX;
-
-  for (unsigned seed = 0;; seed++)
+  for (auto const& test : tests)
   {
-    auto data = generate_data(seed, size_max);
     try
     {
-      for (auto const& test : tests)
-      {
-        test.function(data.length(), data.c_str());
-      }
+      test.function(data.size(), data.c_str());
     }
     catch (std::exception const& exception)
     {
@@ -76,3 +69,20 @@ void peanuts::Fuzzer::execute(Combinatorial combinatorial)
     }
   }
 }
+
+void peanuts::Fuzzer::execute_dummy()
+{
+  for (auto const& test : tests)
+  {
+    try
+    {
+      test.function(0, nullptr);
+    }
+    catch (std::exception const& exception)
+    {
+      std::cerr << exception.what() << std::endl;
+    }
+  }
+}
+
+

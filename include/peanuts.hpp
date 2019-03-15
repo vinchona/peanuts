@@ -59,7 +59,7 @@ struct Fuzzer
     permutation_without_repetitions,
   };
 
-  void execute(Combinatorial combinatorial);
+  void execute(size_t trials, Combinatorial combinatorial, size_t size);
 
 private:
   Fuzzer() = default;
@@ -71,6 +71,9 @@ private:
   };
 
   std::vector<Test> tests;
+
+  void execute_random(size_t seed, size_t max_size);
+  void execute_dummy();
 };
 
 } // namespace peanuts
