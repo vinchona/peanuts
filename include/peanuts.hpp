@@ -4,6 +4,8 @@
 #define PEANUTS_HPP
 
 #include <functional>
+#include <algorithm>
+#include <random>
 #include <vector>
 
 namespace peanuts
@@ -72,7 +74,7 @@ private:
 
   std::vector<Test> tests;
 
-  void execute_random(size_t seed, size_t max_size);
+  void execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size);
   void execute_dummy();
 };
 
