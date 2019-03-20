@@ -11,8 +11,10 @@
 
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void);                                              \
+  static peanuts::Tester::Test PEANUTS_CONCATENATES(gTestVariable, suffix){                                            \
+      PEANUTS_CONCATENATES(peanut_unique_function, suffix), description};                                              \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
-      peanuts::Tester::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);              \
+      peanuts::Tester::instance().add(PEANUTS_CONCATENATES(gTestVariable, suffix));                                    \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(void)
 
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \

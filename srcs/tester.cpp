@@ -39,11 +39,12 @@ static Application parse_command_line(vector<string> command_line)
 
     if (command == "--registered")
     {
-      std::cout << Tester::instance().count() << " tests registered" << std::endl;
+      auto tests = Tester::instance().tests();
+      std::cout << tests.size() << " tests registered" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
-      for (auto const& description : Tester::instance().descriptions())
-        std::cout << "[" << number++ << "]: " << description << std::endl;
+      for (auto const& test : tests)
+        std::cout << "[" << number++ << "]: " << test.description << std::endl;
       std::cout << "--" << std::endl;
       continue;
     }

@@ -23,9 +23,15 @@ struct Tester
     return peanuts;
   }
 
-  int add(std::function<void(void)> function, char const* description);
-  int count();
-  std::vector<char const*> descriptions();
+  struct Test
+  {
+    std::function<void(void)> function;
+    char const* description;
+  };
+
+  std::vector<Test> tests();
+
+  int add(Test test);
   void execute();
 
 private:

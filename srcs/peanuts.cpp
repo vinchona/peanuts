@@ -15,30 +15,16 @@ peanuts::Tester::~Tester() = default;
 
 struct peanuts::Tester::Implementation
 {
-  struct Test
-  {
-    std::function<void(void)> function;
-    char const* description;
-  };
   std::vector<Test> tests;
 };
 
-int peanuts::Tester::add(std::function<void(void)> function, char const* description)
+int peanuts::Tester::add(peanuts::Tester::Test test)
 {
-  peanuts::Tester::Implementation::Test test = {function, description};
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
 }
 
-int peanuts::Tester::count() { return implementation->tests.size(); }
-
-std::vector<char const*> peanuts::Tester::descriptions()
-{
-  std::vector<char const*> descriptions{};
-  for (auto const& test : implementation->tests)
-    descriptions.push_back(test.description);
-  return descriptions;
-}
+std::vector<peanuts::Tester::Test> peanuts::Tester::tests() { return implementation->tests; }
 
 void peanuts::Tester::execute()
 {
