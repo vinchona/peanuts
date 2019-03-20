@@ -59,8 +59,8 @@ struct peanuts::Fuzzer::Implementation
 
   std::vector<Test> tests;
 
-  void execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size);
-  void execute_dummy();
+  void safe_execution(size_t size, char const* data);
+  void execute_random(size_t trial, size_t size);
 };
 
 int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
@@ -74,35 +74,29 @@ int peanuts::Fuzzer::count() { return implementation->tests.size(); }
 
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
 {
-    switch(combinatorial)
-    {
-      case Combinatorial::random:
-        {
-          std::mt19937 generator{size};
-          std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
-          for (size_t trial = 0; trial < trials; trial++)
-            implementation->execute_random(generator, distribution, size);
-          break;
-        }
-      default:
-        {
-          for (size_t trial = 0; trial < trials; trial++)
-            implementation->execute_dummy();
-          break;
-        }
-    }
+  switch(combinatorial)
+  {
+    case Combinatorial::random:
+      {
+        implementation->execute_random(trials, size);
+        break;
+      }
+    default:
+      {
+        for (size_t trial = 0; trial < trials; trial++)
+          implementation->safe_execution(0, nullptr);
+        break;
+      }
+  }
 }
 
-void peanuts::Fuzzer::Implementation::execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size)
+void peanuts::Fuzzer::Implementation::safe_execution(size_t size, char const* data)
 {
-  std::string data{};
-  for (size_t character = 0; character < size; character++)
-    data += std::string{distribution(generator)};
   for (auto const& test : tests)
   {
     try
     {
-      test.function(data.size(), data.c_str());
+      test.function(size, data);
     }
     catch (std::exception const& exception)
     {
@@ -111,18 +105,17 @@ void peanuts::Fuzzer::Implementation::execute_random(std::mt19937& generator, st
   }
 }
 
-void peanuts::Fuzzer::Implementation::execute_dummy()
+void peanuts::Fuzzer::Implementation::execute_random(size_t trials, size_t size)
 {
-  for (auto const& test : tests)
+  std::mt19937 generator{size};
+  std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
+  for (size_t trial = 0; trial < trials; trial++)
   {
-    try
-    {
-      test.function(0, nullptr);
-    }
-    catch (std::exception const& exception)
-    {
-      std::cerr << exception.what() << std::endl;
-    }
+    std::string data{};
+    for (size_t character = 0; character < size; character++)
+      data += std::string{distribution(generator)};
+
+    safe_execution(data.size(), data.c_str());
   }
 }
 
