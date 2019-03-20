@@ -4,9 +4,6 @@
 #define PEANUTS_HPP
 
 #include <functional>
-#include <algorithm>
-#include <random>
-#include <vector>
 #include <memory>
 
 namespace peanuts
@@ -33,12 +30,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> implementation;
   Tester();
-  struct Test
-  {
-    std::function<void(void)> function;
-    char const* description;
-  };
-  std::vector<Test> tests;
 };
 
 struct Fuzzer
@@ -72,17 +63,6 @@ private:
   struct Implementation;
   std::unique_ptr<Implementation> implementation;
   Fuzzer();
-
-  struct Test
-  {
-    std::function<void(size_t, char const*)> function;
-    char const* description;
-  };
-
-  std::vector<Test> tests;
-
-  void execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size);
-  void execute_dummy();
 };
 
 } // namespace peanuts

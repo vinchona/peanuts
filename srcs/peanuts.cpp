@@ -7,6 +7,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <memory>
 
 peanuts::Tester::Tester() : implementation{std::make_unique<Implementation>()}
 {
@@ -16,31 +17,30 @@ peanuts::Tester::~Tester() = default;
 
 struct peanuts::Tester::Implementation
 {
+  struct Test
+  {
+    std::function<void(void)> function;
+    char const* description;
+  };
+  std::vector<Test> tests;
 };
 
 int peanuts::Tester::add(std::function<void(void)> function, char const* description)
 {
-  Test test = {function, description};
-  tests.push_back(test);
-  return tests.size() - 1;
+  peanuts::Tester::Implementation::Test test = {function, description};
+  implementation->tests.push_back(test);
+  return implementation->tests.size() - 1;
 }
 
-int peanuts::Tester::count() { return tests.size(); }
+int peanuts::Tester::count() { return implementation->tests.size(); }
 
 void peanuts::Tester::execute()
 {
-  for (auto const& test : tests)
+  for (auto const& test : implementation->tests)
   {
     std::cout << test.description << std::endl;
     test.function();
   }
-}
-
-int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
-{
-  Test test = {function, description};
-  tests.push_back(test);
-  return tests.size() - 1;
 }
 
 peanuts::Fuzzer::Fuzzer() : implementation{std::make_unique<Implementation>()}
@@ -51,9 +51,26 @@ peanuts::Fuzzer::~Fuzzer() = default;
 
 struct peanuts::Fuzzer::Implementation
 {
+  struct Test
+  {
+    std::function<void(size_t, char const*)> function;
+    char const* description;
+  };
+
+  std::vector<Test> tests;
+
+  void execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size);
+  void execute_dummy();
 };
 
-int peanuts::Fuzzer::count() { return tests.size(); }
+int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
+{
+  peanuts::Fuzzer::Implementation::Test test = {function, description};
+  implementation->tests.push_back(test);
+  return implementation->tests.size() - 1;
+}
+
+int peanuts::Fuzzer::count() { return implementation->tests.size(); }
 
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
 {
@@ -63,13 +80,21 @@ void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t
   {
     switch(combinatorial)
     {
-	    case Combinatorial::random: execute_random(generator, distribution, size); break;
-      default: execute_dummy(); break;
+      case Combinatorial::random:
+        {
+          implementation->execute_random(generator, distribution, size);
+          break;
+        }
+      default:
+        {
+          implementation->execute_dummy();
+          break;
+        }
     }
   }
 }
 
-void peanuts::Fuzzer::execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size)
+void peanuts::Fuzzer::Implementation::execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size)
 {
   std::string data{};
   for (size_t character = 0; character < size; character++)
@@ -87,7 +112,7 @@ void peanuts::Fuzzer::execute_random(std::mt19937& generator, std::uniform_int_d
   }
 }
 
-void peanuts::Fuzzer::execute_dummy()
+void peanuts::Fuzzer::Implementation::execute_dummy()
 {
   for (auto const& test : tests)
   {
