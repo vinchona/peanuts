@@ -74,24 +74,23 @@ int peanuts::Fuzzer::count() { return implementation->tests.size(); }
 
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
 {
-  std::mt19937 generator{size};
-  std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
-  for (size_t trial = 0; trial < trials; trial++)
-  {
     switch(combinatorial)
     {
       case Combinatorial::random:
         {
-          implementation->execute_random(generator, distribution, size);
+          std::mt19937 generator{size};
+          std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
+          for (size_t trial = 0; trial < trials; trial++)
+            implementation->execute_random(generator, distribution, size);
           break;
         }
       default:
         {
-          implementation->execute_dummy();
+          for (size_t trial = 0; trial < trials; trial++)
+            implementation->execute_dummy();
           break;
         }
     }
-  }
 }
 
 void peanuts::Fuzzer::Implementation::execute_random(std::mt19937& generator, std::uniform_int_distribution<char>& distribution, size_t size)
