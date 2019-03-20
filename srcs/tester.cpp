@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 using namespace peanuts;
@@ -21,17 +21,17 @@ static void usage(char* name)
 
 static bool parse_command_line(vector<string> command_line)
 {
-  for(auto const & command: command_line)
+  for (auto const& command : command_line)
   {
-    if(command == "--help")
+    if (command == "--help")
       return true;
 
-    if(command == "--registered")
+    if (command == "--registered")
     {
       std::cout << Tester::instance().count() << " tests registered" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
-      for(auto const& description: Tester::instance().descriptions())
+      for (auto const& description : Tester::instance().descriptions())
         std::cout << "[" << number++ << "]: " << description << std::endl;
       std::cout << "--" << std::endl;
       continue;
@@ -47,11 +47,11 @@ static void safe_main(int arg_count, char* arg_value[])
 {
   vector<string> command_line{};
 
-  for(int i = 1; i < arg_count; ++i)
+  for (int i = 1; i < arg_count; ++i)
     command_line.push_back(arg_value[i]);
 
   bool exit = parse_command_line(command_line);
-  if(exit)
+  if (exit)
   {
     usage(arg_value[0]);
     return;

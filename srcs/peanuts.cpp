@@ -5,13 +5,11 @@
 #include <exception>
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <random>
 #include <vector>
-#include <memory>
 
-peanuts::Tester::Tester() : implementation{std::make_unique<Implementation>()}
-{
-}
+peanuts::Tester::Tester() : implementation{std::make_unique<Implementation>()} {}
 
 peanuts::Tester::~Tester() = default;
 
@@ -37,7 +35,7 @@ int peanuts::Tester::count() { return implementation->tests.size(); }
 std::vector<char const*> peanuts::Tester::descriptions()
 {
   std::vector<char const*> descriptions{};
-  for(auto const& test: implementation->tests)
+  for (auto const& test : implementation->tests)
     descriptions.push_back(test.description);
   return descriptions;
 }
@@ -51,9 +49,7 @@ void peanuts::Tester::execute()
   }
 }
 
-peanuts::Fuzzer::Fuzzer() : implementation{std::make_unique<Implementation>()}
-{
-}
+peanuts::Fuzzer::Fuzzer() : implementation{std::make_unique<Implementation>()} {}
 
 peanuts::Fuzzer::~Fuzzer() = default;
 
@@ -74,6 +70,7 @@ struct peanuts::Fuzzer::Implementation
   void execute_permutation_without_repetitions(size_t trials);
 
   void execute_dummy(size_t trials);
+
 private:
   void safe_execution(size_t size, char const* data);
 };
@@ -90,45 +87,45 @@ int peanuts::Fuzzer::count() { return implementation->tests.size(); }
 std::vector<char const*> peanuts::Fuzzer::descriptions()
 {
   std::vector<char const*> descriptions{};
-  for(auto const& test: implementation->tests)
+  for (auto const& test : implementation->tests)
     descriptions.push_back(test.description);
   return descriptions;
 }
 
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
 {
-  switch(combinatorial)
+  switch (combinatorial)
   {
-    case Combinatorial::random:
-      {
-        implementation->execute_random(trials, size);
-        break;
-      }
-    case Combinatorial::combination_with_repetitions:
-      {
-        implementation->execute_combination_with_repetitions(trials);
-        break;
-      }
-    case Combinatorial::combination_without_repetitions:
-      {
-        implementation->execute_combination_without_repetitions(trials);
-        break;
-      }
-    case Combinatorial::permutation_with_repetitions:
-      {
-        implementation->execute_permutation_with_repetitions(trials);
-        break;
-      }
-    case Combinatorial::permutation_without_repetitions:
-      {
-        implementation->execute_permutation_without_repetitions(trials);
-        break;
-      }
-    default:
-      {
-        implementation->execute_dummy(trials);
-        break;
-      }
+  case Combinatorial::random:
+  {
+    implementation->execute_random(trials, size);
+    break;
+  }
+  case Combinatorial::combination_with_repetitions:
+  {
+    implementation->execute_combination_with_repetitions(trials);
+    break;
+  }
+  case Combinatorial::combination_without_repetitions:
+  {
+    implementation->execute_combination_without_repetitions(trials);
+    break;
+  }
+  case Combinatorial::permutation_with_repetitions:
+  {
+    implementation->execute_permutation_with_repetitions(trials);
+    break;
+  }
+  case Combinatorial::permutation_without_repetitions:
+  {
+    implementation->execute_permutation_without_repetitions(trials);
+    break;
+  }
+  default:
+  {
+    implementation->execute_dummy(trials);
+    break;
+  }
   }
 }
 
@@ -146,32 +143,19 @@ void peanuts::Fuzzer::Implementation::execute_random(size_t trials, size_t size)
   }
 }
 
-void peanuts::Fuzzer::Implementation::execute_combination_with_repetitions(size_t trials)
-{
-  execute_dummy(trials);
-}
+void peanuts::Fuzzer::Implementation::execute_combination_with_repetitions(size_t trials) { execute_dummy(trials); }
 
-void peanuts::Fuzzer::Implementation::execute_combination_without_repetitions(size_t trials)
-{
-  execute_dummy(trials);
-}
+void peanuts::Fuzzer::Implementation::execute_combination_without_repetitions(size_t trials) { execute_dummy(trials); }
 
-void peanuts::Fuzzer::Implementation::execute_permutation_with_repetitions( size_t trials)
-{
-  execute_dummy(trials);
-}
+void peanuts::Fuzzer::Implementation::execute_permutation_with_repetitions(size_t trials) { execute_dummy(trials); }
 
-void peanuts::Fuzzer::Implementation::execute_permutation_without_repetitions(size_t trials)
-{
-  execute_dummy(trials);
-}
+void peanuts::Fuzzer::Implementation::execute_permutation_without_repetitions(size_t trials) { execute_dummy(trials); }
 
 void peanuts::Fuzzer::Implementation::execute_dummy(size_t trials)
 {
   for (size_t trial = 0; trial < trials; trial++)
     safe_execution(0, nullptr);
 }
-
 
 void peanuts::Fuzzer::Implementation::safe_execution(size_t size, char const* data)
 {
@@ -187,5 +171,3 @@ void peanuts::Fuzzer::Implementation::safe_execution(size_t size, char const* da
     }
   }
 }
-
-
