@@ -13,6 +13,7 @@ namespace peanuts
 
 struct Tester
 {
+  ~Tester();
   Tester(Tester const&) = delete;
   Tester& operator=(Tester const&) = delete;
   Tester(Tester&&) = delete;
@@ -28,7 +29,7 @@ struct Tester
   void execute();
 
 private:
-  Tester() = default;
+  Tester();
   struct Test
   {
     std::function<void(void)> function;
@@ -39,6 +40,7 @@ private:
 
 struct Fuzzer
 {
+  ~Fuzzer();
   Fuzzer(Fuzzer const&) = delete;
   Fuzzer& operator=(Fuzzer const&) = delete;
   Fuzzer(Fuzzer&&) = delete;
@@ -64,7 +66,7 @@ struct Fuzzer
   void execute(size_t trials, Combinatorial combinatorial, size_t size);
 
 private:
-  Fuzzer() = default;
+  Fuzzer();
 
   struct Test
   {

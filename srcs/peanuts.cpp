@@ -8,6 +8,9 @@
 #include <random>
 #include <vector>
 
+peanuts::Tester::Tester() = default;
+peanuts::Tester::~Tester() = default;
+
 int peanuts::Tester::add(std::function<void(void)> function, char const* description)
 {
   Test test = {function, description};
@@ -32,6 +35,9 @@ int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char
   tests.push_back(test);
   return tests.size() - 1;
 }
+
+peanuts::Fuzzer::Fuzzer() = default;
+peanuts::Fuzzer::~Fuzzer() = default;
 
 int peanuts::Fuzzer::count() { return tests.size(); }
 
