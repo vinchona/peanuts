@@ -29,10 +29,8 @@ struct Tester
     char const* description;
   };
 
+  size_t add(Test test);
   std::vector<Test> tests();
-
-  int add(Test test);
-  void execute();
 
 private:
   struct Implementation;

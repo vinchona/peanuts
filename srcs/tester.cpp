@@ -1,4 +1,4 @@
-#include "tester.hpp"
+#include <tester.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
@@ -46,7 +46,8 @@ static Application parse_command_line(vector<string> command_line)
       for (auto const& test : tests)
         std::cout << "[" << number++ << "]: " << test.description << std::endl;
       std::cout << "--" << std::endl;
-      continue;
+      application.exit = true;
+      return application;
     }
 
     std::cout << "Unknown command: " << command << std::endl;
@@ -71,7 +72,13 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  Tester::instance().execute();
+  auto tests = Tester::instance().tests();
+  size_t number = 0;
+  for (auto const& test : tests)
+  {
+    std::cout << "[" << number++ << "]: " << test.description << std::endl;
+    test.function();
+  }
   return;
 }
 

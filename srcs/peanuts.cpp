@@ -18,22 +18,13 @@ struct peanuts::Tester::Implementation
   std::vector<Test> tests;
 };
 
-int peanuts::Tester::add(peanuts::Tester::Test test)
+size_t peanuts::Tester::add(peanuts::Tester::Test test)
 {
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
 }
 
 std::vector<peanuts::Tester::Test> peanuts::Tester::tests() { return implementation->tests; }
-
-void peanuts::Tester::execute()
-{
-  for (auto const& test : implementation->tests)
-  {
-    std::cout << test.description << std::endl;
-    test.function();
-  }
-}
 
 peanuts::Fuzzer::Fuzzer() : implementation{std::make_unique<Implementation>()} {}
 
