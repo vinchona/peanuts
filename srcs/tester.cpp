@@ -17,6 +17,7 @@ static void usage(char* name)
   std::cout << std::endl;
   std::cout << "--help" << '\t' << "This help" << std::endl;
   std::cout << "--count" << '\t' << "Number of tests" << std::endl;
+  std::cout << "--descriptions" << '\t' << "Describe tests" << std::endl;
 }
 
 static bool parse_command_line(vector<string> command_line)
@@ -29,6 +30,13 @@ static bool parse_command_line(vector<string> command_line)
     if(command == "--count")
     {
       std::cout << Tester::instance().count() << " tests registered" << std::endl;
+      continue;
+    }
+
+    if(command == "--descriptions")
+    {
+      for(auto const& description: Tester::instance().descriptions())
+        std::cout << description << std::endl;
       continue;
     }
 
