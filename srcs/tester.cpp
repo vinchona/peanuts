@@ -10,6 +10,12 @@ using namespace peanuts;
 
 #define MAYBE_UNUSED(variable) (void)(variable)
 
+struct Application
+{
+  bool show_usage = false;
+  bool exit = false;
+};
+
 static void usage(char* name)
 {
   std::cout << "Usage: " << name << " [OPTION]..." << std::endl;
@@ -19,12 +25,17 @@ static void usage(char* name)
   std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
 }
 
-static bool parse_command_line(vector<string> command_line)
+static Application parse_command_line(vector<string> command_line)
 {
+  Application application{};
   for (auto const& command : command_line)
   {
     if (command == "--help")
-      return true;
+    {
+      application.show_usage = true;
+      application.exit = true;
+      return application;
+    }
 
     if (command == "--registered")
     {
@@ -38,9 +49,11 @@ static bool parse_command_line(vector<string> command_line)
     }
 
     std::cout << "Unknown command: " << command << std::endl;
-    return true;
+    application.exit = true;
+    return application;
   }
-  return false;
+  application.exit = false;
+  return application;
 }
 
 static void safe_main(int arg_count, char* arg_value[])
@@ -50,12 +63,12 @@ static void safe_main(int arg_count, char* arg_value[])
   for (int i = 1; i < arg_count; ++i)
     command_line.push_back(arg_value[i]);
 
-  bool exit = parse_command_line(command_line);
-  if (exit)
-  {
+  auto application = parse_command_line(command_line);
+  if (application.show_usage)
     usage(arg_value[0]);
+
+  if (application.exit)
     return;
-  }
 
   Tester::instance().execute();
   return;
