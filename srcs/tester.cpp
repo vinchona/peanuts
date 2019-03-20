@@ -16,8 +16,7 @@ static void usage(char* name)
   std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
   std::cout << std::endl;
   std::cout << "--help" << '\t' << "This help" << std::endl;
-  std::cout << "--count" << '\t' << "Number of tests" << std::endl;
-  std::cout << "--descriptions" << '\t' << "Describe tests" << std::endl;
+  std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
 }
 
 static bool parse_command_line(vector<string> command_line)
@@ -27,16 +26,14 @@ static bool parse_command_line(vector<string> command_line)
     if(command == "--help")
       return true;
 
-    if(command == "--count")
+    if(command == "--registered")
     {
       std::cout << Tester::instance().count() << " tests registered" << std::endl;
-      continue;
-    }
-
-    if(command == "--descriptions")
-    {
+      std::cout << "--" << std::endl;
+      size_t number = 0;
       for(auto const& description: Tester::instance().descriptions())
-        std::cout << description << std::endl;
+        std::cout << "[" << number++ << "]: " << description << std::endl;
+      std::cout << "--" << std::endl;
       continue;
     }
 
