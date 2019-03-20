@@ -33,6 +33,7 @@ private:
   std::unique_ptr<Implementation> implementation;
   Tester();
 };
+
 } // namespace peanuts
 
-#endif
+#endif /* __TESTER__ */
