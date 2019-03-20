@@ -87,6 +87,14 @@ int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char
 
 int peanuts::Fuzzer::count() { return implementation->tests.size(); }
 
+std::vector<char const*> peanuts::Fuzzer::descriptions()
+{
+  std::vector<char const*> descriptions{};
+  for(auto const& test: implementation->tests)
+    descriptions.push_back(test.description);
+  return descriptions;
+}
+
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)
 {
   switch(combinatorial)

@@ -49,6 +49,7 @@ struct Fuzzer
 
   int add(std::function<void(size_t, char const*)> function, char const* description);
   int count();
+  std::vector<char const*> descriptions();
 
   enum struct Combinatorial
   {
