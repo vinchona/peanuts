@@ -8,8 +8,15 @@
 #include <random>
 #include <vector>
 
-peanuts::Tester::Tester() = default;
+peanuts::Tester::Tester() : implementation{std::make_unique<Implementation>()}
+{
+}
+
 peanuts::Tester::~Tester() = default;
+
+struct peanuts::Tester::Implementation
+{
+};
 
 int peanuts::Tester::add(std::function<void(void)> function, char const* description)
 {
@@ -36,8 +43,15 @@ int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char
   return tests.size() - 1;
 }
 
-peanuts::Fuzzer::Fuzzer() = default;
+peanuts::Fuzzer::Fuzzer() : implementation{std::make_unique<Implementation>()}
+{
+}
+
 peanuts::Fuzzer::~Fuzzer() = default;
+
+struct peanuts::Fuzzer::Implementation
+{
+};
 
 int peanuts::Fuzzer::count() { return tests.size(); }
 

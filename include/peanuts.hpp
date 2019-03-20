@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <random>
 #include <vector>
+#include <memory>
 
 namespace peanuts
 {
@@ -29,6 +30,8 @@ struct Tester
   void execute();
 
 private:
+  struct Implementation;
+  std::unique_ptr<Implementation> implementation;
   Tester();
   struct Test
   {
@@ -66,6 +69,8 @@ struct Fuzzer
   void execute(size_t trials, Combinatorial combinatorial, size_t size);
 
 private:
+  struct Implementation;
+  std::unique_ptr<Implementation> implementation;
   Fuzzer();
 
   struct Test
