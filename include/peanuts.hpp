@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <memory>
+#include <vector>
 
 namespace peanuts
 {
@@ -24,6 +25,7 @@ struct Tester
 
   int add(std::function<void(void)> function, char const* description);
   int count();
+  std::vector<char const*> descriptions();
   void execute();
 
 private:

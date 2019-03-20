@@ -34,6 +34,14 @@ int peanuts::Tester::add(std::function<void(void)> function, char const* descrip
 
 int peanuts::Tester::count() { return implementation->tests.size(); }
 
+std::vector<char const*> peanuts::Tester::descriptions()
+{
+  std::vector<char const*> descriptions{};
+  for(auto const& test: implementation->tests)
+    descriptions.push_back(test.description);
+  return descriptions;
+}
+
 void peanuts::Tester::execute()
 {
   for (auto const& test : implementation->tests)
