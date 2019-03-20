@@ -1,4 +1,4 @@
-#include "peanuts.hpp"
+#include "fuzzer.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
