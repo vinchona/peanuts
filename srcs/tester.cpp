@@ -5,9 +5,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-using namespace peanuts;
-
 #define MAYBE_UNUSED(variable) (void)(variable)
 
 struct Application
@@ -25,7 +22,7 @@ static void usage(char* name)
   std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
 }
 
-static Application parse_command_line(vector<string> command_line)
+static Application parse_command_line(std::vector<std::string> command_line)
 {
   Application application{};
   for (auto const& command : command_line)
@@ -39,7 +36,7 @@ static Application parse_command_line(vector<string> command_line)
 
     if (command == "--registered")
     {
-      auto tests = Tester::instance().tests();
+      auto tests = peanuts::Tester::instance().tests();
       std::cout << tests.size() << " tests registered" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
@@ -60,7 +57,7 @@ static Application parse_command_line(vector<string> command_line)
 
 static void safe_main(int arg_count, char* arg_value[])
 {
-  vector<string> command_line{};
+  std::vector<std::string> command_line{};
 
   for (int i = 1; i < arg_count; ++i)
     command_line.push_back(arg_value[i]);
@@ -72,7 +69,7 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  auto tests = Tester::instance().tests();
+  auto tests = peanuts::Tester::instance().tests();
   size_t number = 0;
   for (auto const& test : tests)
   {
@@ -89,9 +86,9 @@ int main(int arg_count, char* arg_value[])
     safe_main(arg_count, arg_value);
     return EXIT_SUCCESS;
   }
-  catch (runtime_error const& error)
+  catch (std::runtime_error const& error)
   {
-    cerr << endl << "Exception caught: " << error.what() << endl;
+    std::cerr << std::endl << "Exception caught: " << error.what() << std::endl;
     return EXIT_FAILURE;
   }
 }
