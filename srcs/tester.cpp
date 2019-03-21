@@ -1,10 +1,10 @@
-#include <tester.hpp>
 #include <cstdlib>
+#include <deque>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
-#include <deque>
-#include <sstream>
+#include <tester.hpp>
 
 #define MAYBE_UNUSED(variable) (void)(variable)
 
@@ -12,7 +12,7 @@ struct Application
 {
   bool show_usage = false;
   bool exit = false;
-  std::vector<size_t> tests {};
+  std::vector<size_t> tests{};
 };
 
 static void usage(char* name)
@@ -28,7 +28,7 @@ static void usage(char* name)
 static Application parse_command_line(std::deque<std::string> command_line)
 {
   Application application{};
-  while(!command_line.empty())
+  while (!command_line.empty())
   {
     auto const command = command_line.front();
     if (command == "--help")
@@ -54,7 +54,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
     if (command == "--test")
     {
       command_line.pop_front();
-      if(command_line.empty())
+      if (command_line.empty())
       {
         std::cout << "Missing argument to '" << command << "'" << std::endl;
         application.exit = true;
@@ -94,11 +94,11 @@ static void safe_main(int arg_count, char* arg_value[])
     return;
 
   auto tests = peanuts::Tester::instance().tests();
-  if(!application.tests.empty())
+  if (!application.tests.empty())
   {
-    for(auto const& test: application.tests)
+    for (auto const& test : application.tests)
     {
-      if(test >= tests.size())
+      if (test >= tests.size())
         throw std::runtime_error{std::string{"No such test: "} + std::to_string(test)};
       std::cout << "[" << test << "]: " << tests[test].description << std::endl;
       tests[test].function;
