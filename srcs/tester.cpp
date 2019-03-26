@@ -6,8 +6,6 @@
 #include <string>
 #include <tester.hpp>
 
-#define MAYBE_UNUSED(variable) (void)(variable)
-
 struct Application
 {
   bool show_usage = false;
