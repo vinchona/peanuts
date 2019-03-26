@@ -9,8 +9,9 @@
 struct Application
 {
   bool show_usage = false;
-  bool exit = false;
+  bool exit = fals;
   size_t size = 0;
+  peanuts::Fuzzer::Combinatorial combinatorial = peanuts::Fuzzer::Combinatorial::random;
 };
 
 
@@ -20,6 +21,13 @@ static void usage(char* name)
   std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
   std::cout << std::endl;
   std::cout << "--help" << '\t' << "This help" << std::endl;
+  std::cout << "--size" << '\t' << "Number of random characters" << std::endl;
+  std::cout << "--combinatorial" << '\t' << "Type of fuzzing:" << std::endl;
+  std::cout << '\t' << '\t' << "  - random (default)" << std::endl;
+  std::cout << '\t' << '\t' << "  - combination_with_repetitions" << std::endl;
+  std::cout << '\t' << '\t' << "  - combination_without_repetitions" << std::endl;
+  std::cout << '\t' << '\t' << "  - permutation_with_repetitions" << std::endl;
+  std::cout << '\t' << '\t' << "  - permutation_without_repetitions" << std::endl;
 }
 
 static Application parse_command_line(std::deque<std::string> command_line)
@@ -53,6 +61,63 @@ static Application parse_command_line(std::deque<std::string> command_line)
       application.size = size;
       command_line.pop_front();
       continue;
+    }
+
+    if (command == "--combinatorial")
+    {
+      command_line.pop_front();
+      if (command_line.empty())
+      {
+        std::cout << "Missing argument to '" << command << "'" << std::endl;
+        application.exit = true;
+        return application;
+      }
+
+      std::string combinatorial{command_line.front()};
+      if (combinatorial == "random")
+      {
+        application.combinatorial = peanuts::Fuzzer::Combinatorial::random;
+        command_line.pop_front();
+        continue;
+      }
+
+      if (combinatorial == "combination_with_repetitions")
+      {
+        application.combinatorial = peanuts::Fuzzer::Combinatorial::combination_with_repetitions;
+        command_line.pop_front();
+        continue;
+      }
+
+      if (combinatorial == "combination_without_repetitions")
+      {
+        application.combinatorial = peanuts::Fuzzer::Combinatorial::combination_without_repetitions;
+        command_line.pop_front();
+        continue;
+      }
+
+      if (combinatorial == "permutation_with_repetitions")
+      {
+        application.combinatorial = peanuts::Fuzzer::Combinatorial::permutation_with_repetitions;
+        command_line.pop_front();
+        continue;
+      }
+
+      if (combinatorial == "permutation_without_repetitions")
+      {
+        application.combinatorial = peanuts::Fuzzer::Combinatorial::permutation_without_repetitions;
+        command_line.pop_front();
+        continue;
+      }
+
+      std::cout << "Unknown combinatorial: " << combinatorial << std::endl;
+      std::cout << "Known value:" << std::endl
+        << "  - random (default)" << std::endl
+        << "  - combination_with_repetitions" << std::endl
+        << "  - combination_without_repetitions" << std::endl
+        << "  - permutation_with_repetitions" << std::endl
+        << "  - permutation_without_repetitions" << std::endl;
+      application.exit = true;
+      return application;
     }
 
     std::cout << "Unknown command: " << command << std::endl;
