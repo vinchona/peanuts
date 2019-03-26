@@ -1,10 +1,10 @@
 #include "fuzzer.hpp"
 #include <cstdlib>
-#include <iostream>
-#include <stdexcept>
 #include <deque>
-#include <string>
+#include <iostream>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 
 struct Application
 {
@@ -14,7 +14,6 @@ struct Application
   size_t trials = 1;
   peanuts::Fuzzer::Combinatorial combinatorial = peanuts::Fuzzer::Combinatorial::random;
 };
-
 
 static void usage(char* name)
 {
@@ -133,11 +132,11 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
       std::cout << "Unknown combinatorial: " << combinatorial << std::endl;
       std::cout << "Known value:" << std::endl
-        << "  - random (default)" << std::endl
-        << "  - combination_with_repetitions" << std::endl
-        << "  - combination_without_repetitions" << std::endl
-        << "  - permutation_with_repetitions" << std::endl
-        << "  - permutation_without_repetitions" << std::endl;
+                << "  - random (default)" << std::endl
+                << "  - combination_with_repetitions" << std::endl
+                << "  - combination_without_repetitions" << std::endl
+                << "  - permutation_with_repetitions" << std::endl
+                << "  - permutation_without_repetitions" << std::endl;
       application.exit = true;
       return application;
     }
