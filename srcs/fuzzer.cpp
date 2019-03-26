@@ -4,12 +4,13 @@
 #include <stdexcept>
 #include <deque>
 #include <string>
+#include <sstream>
 
 struct Application
 {
   bool show_usage = false;
   bool exit = false;
-  std::vector<size_t> tests{};
+  size_t size = 0;
 };
 
 
@@ -32,6 +33,26 @@ static Application parse_command_line(std::deque<std::string> command_line)
       application.show_usage = true;
       application.exit = true;
       return application;
+    }
+
+    if (command == "--size")
+    {
+      command_line.pop_front();
+      if (command_line.empty())
+      {
+        std::cout << "Missing argument to '" << command << "'" << std::endl;
+        application.exit = true;
+        return application;
+      }
+
+      std::stringstream ss{command_line.front()};
+      ss.unsetf(std::ios::dec);
+      ss.unsetf(std::ios::hex);
+      size_t size;
+      ss >> size;
+      application.size = size;
+      command_line.pop_front();
+      continue;
     }
 
     std::cout << "Unknown command: " << command << std::endl;
@@ -57,7 +78,7 @@ static void safe_main(int arg_count, char* arg_value[])
 
 
   std::cout << "You have " << peanuts::Fuzzer::instance().count() << " fuzztests" << std::endl;
-  peanuts::Fuzzer::instance().execute(20, peanuts::Fuzzer::Combinatorial::random, 256);
+  peanuts::Fuzzer::instance().execute(20, peanuts::Fuzzer::Combinatorial::random, application.size);
   return;
 }
 

@@ -5,6 +5,6 @@
 ./bin/tester.exe
 echo $?
 
-./bin/fuzzer.exe
+./bin/fuzzer.exe --size 256
 echo $?
 
