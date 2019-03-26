@@ -11,7 +11,6 @@ PEANUTS_TEST("Adding other test description") { std::cout << "Executing other un
 PEANUTS_FUZZ("Adding fuzz decription")
 {
   static int count = 0;
-  std::cout << "Executing fuzz test[" << count << "]" << std::endl;
   std::cout << "size:" << peanuts_fuzz_size << std::endl;
   std::cout << "data:" << peanuts_fuzz_size << std::endl;
   for (size_t size = 0; size < peanuts_fuzz_size; size++)

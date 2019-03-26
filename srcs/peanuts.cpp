@@ -112,6 +112,7 @@ void peanuts::Fuzzer::Implementation::execute_random(size_t trials, size_t size)
   std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
   for (size_t trial = 0; trial < trials; trial++)
   {
+    std::cout << "Trial: " << trial << std::endl;
     std::string data{};
     for (size_t character = 0; character < size; character++)
       data += std::string{distribution(generator)};
@@ -136,8 +137,10 @@ void peanuts::Fuzzer::Implementation::execute_dummy(size_t trials)
 
 void peanuts::Fuzzer::Implementation::safe_execution(size_t size, char const* data)
 {
+  size_t number = 0;
   for (auto const& test : tests)
   {
+    std::cout << "[" << number++ << "]: " << test.description << std::endl;
     try
     {
       test.function(size, data);
