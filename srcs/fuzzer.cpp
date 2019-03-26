@@ -10,7 +10,7 @@ struct Application
 {
   bool show_usage = false;
   bool exit = false;
-  size_t size = 0;
+  size_t size = 256;
   size_t trials = 1;
   peanuts::Fuzzer::Combinatorial combinatorial = peanuts::Fuzzer::Combinatorial::random;
 };
