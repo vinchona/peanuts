@@ -9,8 +9,9 @@
 struct Application
 {
   bool show_usage = false;
-  bool exit = fals;
+  bool exit = false;
   size_t size = 0;
+  size_t trials = 1;
   peanuts::Fuzzer::Combinatorial combinatorial = peanuts::Fuzzer::Combinatorial::random;
 };
 
@@ -22,6 +23,7 @@ static void usage(char* name)
   std::cout << std::endl;
   std::cout << "--help" << '\t' << "This help" << std::endl;
   std::cout << "--size" << '\t' << "Number of random characters" << std::endl;
+  std::cout << "--trials" << '\t' << "Number of trials" << std::endl;
   std::cout << "--combinatorial" << '\t' << "Type of fuzzing:" << std::endl;
   std::cout << '\t' << '\t' << "  - random (default)" << std::endl;
   std::cout << '\t' << '\t' << "  - combination_with_repetitions" << std::endl;
@@ -59,6 +61,26 @@ static Application parse_command_line(std::deque<std::string> command_line)
       size_t size;
       ss >> size;
       application.size = size;
+      command_line.pop_front();
+      continue;
+    }
+
+    if (command == "--trials")
+    {
+      command_line.pop_front();
+      if (command_line.empty())
+      {
+        std::cout << "Missing argument to '" << command << "'" << std::endl;
+        application.exit = true;
+        return application;
+      }
+
+      std::stringstream ss{command_line.front()};
+      ss.unsetf(std::ios::dec);
+      ss.unsetf(std::ios::hex);
+      size_t trials;
+      ss >> trials;
+      application.trials = trials;
       command_line.pop_front();
       continue;
     }
@@ -141,10 +163,8 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-
   std::cout << "You have " << peanuts::Fuzzer::instance().count() << " fuzztests" << std::endl;
-  peanuts::Fuzzer::instance().execute(20, peanuts::Fuzzer::Combinatorial::random, application.size);
-  return;
+  peanuts::Fuzzer::instance().execute(application.trials, application.combinatorial, application.size);
 }
 
 int main(int arg_count, char* arg_value[])
