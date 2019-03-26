@@ -110,8 +110,6 @@ static void safe_main(int arg_count, char* arg_value[])
     std::cout << "[" << number++ << "]: " << test.description << std::endl;
     test.function();
   }
-
-  return;
 }
 
 int main(int arg_count, char* arg_value[])
