@@ -52,14 +52,9 @@ int peanuts::Fuzzer::add(Test test)
   return implementation->tests.size() - 1;
 }
 
-int peanuts::Fuzzer::count() { return implementation->tests.size(); }
-
-std::vector<char const*> peanuts::Fuzzer::descriptions()
+std::vector<peanuts::Fuzzer::Test> peanuts::Fuzzer::tests()
 {
-  std::vector<char const*> descriptions{};
-  for (auto const& test : implementation->tests)
-    descriptions.push_back(test.description);
-  return descriptions;
+  return implementation->tests;
 }
 
 void peanuts::Fuzzer::execute(size_t trials, Combinatorial combinatorial, size_t size)

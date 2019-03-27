@@ -162,7 +162,7 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  std::cout << "You have " << peanuts::Fuzzer::instance().count() << " fuzztests" << std::endl;
+  std::cout << "You have " << peanuts::Fuzzer::instance().tests().size() << " fuzztests" << std::endl;
   peanuts::Fuzzer::instance().execute(application.trials, application.combinatorial, application.size);
 }
 

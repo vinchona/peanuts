@@ -30,8 +30,7 @@ struct Fuzzer
   };
 
   int add(Test test);
-  int count();
-  std::vector<char const*> descriptions();
+  std::vector<Test> tests();
 
   enum struct Combinatorial
   {
