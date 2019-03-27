@@ -23,7 +23,14 @@ struct Fuzzer
     return peanuts;
   }
 
+  struct Test
+  {
+    std::function<void(size_t, char const*)> function;
+    char const* description;
+  };
+
   int add(std::function<void(size_t, char const*)> function, char const* description);
+
   int count();
   std::vector<char const*> descriptions();
 

@@ -32,12 +32,6 @@ peanuts::Fuzzer::~Fuzzer() = default;
 
 struct peanuts::Fuzzer::Implementation
 {
-  struct Test
-  {
-    std::function<void(size_t, char const*)> function;
-    char const* description;
-  };
-
   std::vector<Test> tests;
 
   void execute_random(size_t trials, size_t size);
@@ -54,7 +48,7 @@ private:
 
 int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
 {
-  peanuts::Fuzzer::Implementation::Test test = {function, description};
+  Test test = {function, description};
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
 }
