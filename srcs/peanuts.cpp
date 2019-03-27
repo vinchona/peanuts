@@ -18,7 +18,7 @@ struct peanuts::Tester::Implementation
   std::vector<Test> tests;
 };
 
-size_t peanuts::Tester::add(peanuts::Tester::Test test)
+size_t peanuts::Tester::add(Test test)
 {
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
@@ -46,9 +46,8 @@ private:
   void safe_execution(size_t size, char const* data);
 };
 
-int peanuts::Fuzzer::add(std::function<void(size_t, char const*)> function, char const* description)
+int peanuts::Fuzzer::add(Test test)
 {
-  Test test = {function, description};
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
 }

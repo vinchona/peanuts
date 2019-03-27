@@ -20,8 +20,10 @@
 #define PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, suffix)                                                  \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size,                           \
                                                                    char const* peanuts_fuzz_data);                     \
+  static peanuts::Fuzzer::Test PEANUTS_CONCATENATES(gTestVariable, suffix){                                            \
+	  PEANUTS_CONCATENATES(peanut_unique_function, suffix), description};					       \
   static auto PEANUTS_CONCATENATES(gUnusedVariable, suffix) =                                                          \
-      peanuts::Fuzzer::instance().add(PEANUTS_CONCATENATES(peanut_unique_function, suffix), description);              \
+      peanuts::Fuzzer::instance().add(PEANUTS_CONCATENATES(gTestVariable, suffix));                                    \
   static void PEANUTS_CONCATENATES(peanut_unique_function, suffix)(size_t peanuts_fuzz_size,                           \
                                                                    char const* peanuts_fuzz_data)
 
