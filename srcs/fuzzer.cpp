@@ -21,6 +21,7 @@ static void usage(char* name)
   std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
   std::cout << std::endl;
   std::cout << "--help" << '\t' << "This help" << std::endl;
+  std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
   std::cout << "--size" << '\t' << "Number of random characters" << std::endl;
   std::cout << "--trials" << '\t' << "Number of trials" << std::endl;
   std::cout << "--combinatorial" << '\t' << "Type of fuzzing:" << std::endl;
@@ -40,6 +41,19 @@ static Application parse_command_line(std::deque<std::string> command_line)
     if (command == "--help")
     {
       application.show_usage = true;
+      application.exit = true;
+      return application;
+    }
+
+    if (command == "--registered")
+    {
+      auto tests = peanuts::Fuzzer::instance().tests();
+      std::cout << tests.size() << " tests registered:" << std::endl;
+      std::cout << "--" << std::endl;
+      size_t number = 0;
+      for (auto const& test : tests)
+        std::cout << "[" << number++ << "]: " << test.description << std::endl;
+      std::cout << "--" << std::endl;
       application.exit = true;
       return application;
     }
@@ -132,11 +146,11 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
       std::cout << "Unknown combinatorial: " << combinatorial << std::endl;
       std::cout << "Known value:" << std::endl
-                << "  - random (default)" << std::endl
-                << "  - combination_with_repetitions" << std::endl
-                << "  - combination_without_repetitions" << std::endl
-                << "  - permutation_with_repetitions" << std::endl
-                << "  - permutation_without_repetitions" << std::endl;
+        << "  - random (default)" << std::endl
+        << "  - combination_with_repetitions" << std::endl
+        << "  - combination_without_repetitions" << std::endl
+        << "  - permutation_with_repetitions" << std::endl
+        << "  - permutation_without_repetitions" << std::endl;
       application.exit = true;
       return application;
     }
