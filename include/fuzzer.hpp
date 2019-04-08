@@ -29,7 +29,7 @@ struct Fuzzer
     char const* description;
   };
 
-  int add(Test test);
+  size_t add(Test test);
   std::vector<Test> tests();
 
 private:

@@ -29,7 +29,7 @@ struct peanuts::Fuzzer::Implementation
   std::vector<Test> tests;
 };
 
-int peanuts::Fuzzer::add(Test test)
+size_t peanuts::Fuzzer::add(Test test)
 {
   implementation->tests.push_back(test);
   return implementation->tests.size() - 1;
