@@ -1,18 +1,30 @@
 #include "fuzzer.hpp"
 #include <cstdlib>
+#include <climits>
 #include <deque>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <random>
+#include <vector>
 
 struct Application
 {
+  enum struct Combinatorial
+  {
+    random,
+    combination_with_repetitions,
+    combination_without_repetitions,
+    permutation_with_repetitions,
+    permutation_without_repetitions,
+  };
+
   bool show_usage = false;
   bool exit = false;
   size_t size = 256;
   size_t trials = 1;
-  peanuts::Fuzzer::Combinatorial combinatorial = peanuts::Fuzzer::Combinatorial::random;
+  Application::Combinatorial combinatorial = Application::Combinatorial::random;
 };
 
 static void usage(char* name)
@@ -111,35 +123,35 @@ static Application parse_command_line(std::deque<std::string> command_line)
       std::string combinatorial{command_line.front()};
       if (combinatorial == "random")
       {
-        application.combinatorial = peanuts::Fuzzer::Combinatorial::random;
+        application.combinatorial = Application::Combinatorial::random;
         command_line.pop_front();
         continue;
       }
 
       if (combinatorial == "combination_with_repetitions")
       {
-        application.combinatorial = peanuts::Fuzzer::Combinatorial::combination_with_repetitions;
+        application.combinatorial = Application::Combinatorial::combination_with_repetitions;
         command_line.pop_front();
         continue;
       }
 
       if (combinatorial == "combination_without_repetitions")
       {
-        application.combinatorial = peanuts::Fuzzer::Combinatorial::combination_without_repetitions;
+        application.combinatorial = Application::Combinatorial::combination_without_repetitions;
         command_line.pop_front();
         continue;
       }
 
       if (combinatorial == "permutation_with_repetitions")
       {
-        application.combinatorial = peanuts::Fuzzer::Combinatorial::permutation_with_repetitions;
+        application.combinatorial = Application::Combinatorial::permutation_with_repetitions;
         command_line.pop_front();
         continue;
       }
 
       if (combinatorial == "permutation_without_repetitions")
       {
-        application.combinatorial = peanuts::Fuzzer::Combinatorial::permutation_without_repetitions;
+        application.combinatorial = Application::Combinatorial::permutation_without_repetitions;
         command_line.pop_front();
         continue;
       }
@@ -162,6 +174,90 @@ static Application parse_command_line(std::deque<std::string> command_line)
   application.exit = false;
   return application;
 }
+
+static void safe_execution(std::vector<peanuts::Fuzzer::Test> tests, size_t size, char const* data)
+{
+  size_t number = 0;
+  for (auto const& test : tests)
+  {
+    std::cout << "[" << number++ << "]: " << test.description << std::endl;
+    try
+    {
+      test.function(size, data);
+    }
+    catch (std::exception const& exception)
+    {
+      std::cerr << exception.what() << std::endl;
+    }
+  }
+}
+
+static void execute_dummy(size_t trials, std::vector<peanuts::Fuzzer::Test> tests)
+{
+  for (size_t trial = 0; trial < trials; trial++)
+    safe_execution(tests, 0, nullptr);
+}
+
+static void execute_random(size_t trials, std::vector<peanuts::Fuzzer::Test> tests, size_t size)
+{
+  std::mt19937 generator{size};
+  std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
+  for (size_t trial = 0; trial < trials; trial++)
+  {
+    std::cout << "Trial: " << trial << std::endl;
+    std::string data{};
+    for (size_t character = 0; character < size; character++)
+      data += std::string{distribution(generator)};
+
+    safe_execution(tests, data.size(), data.c_str());
+  }
+}
+
+static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+
+static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+
+static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+
+static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+
+static void execute(size_t trials, std::vector<peanuts::Fuzzer::Test> tests, Application::Combinatorial combinatorial, size_t size)
+{
+  switch (combinatorial)
+  {
+    case Application::Combinatorial::random:
+      {
+        execute_random(trials, tests, size);
+        break;
+      }
+    case Application::Combinatorial::combination_with_repetitions:
+      {
+        execute_combination_with_repetitions(trials, tests);
+        break;
+      }
+    case Application::Combinatorial::combination_without_repetitions:
+      {
+        execute_combination_without_repetitions(trials, tests);
+        break;
+      }
+    case Application::Combinatorial::permutation_with_repetitions:
+      {
+        execute_permutation_with_repetitions(trials, tests);
+        break;
+      }
+    case Application::Combinatorial::permutation_without_repetitions:
+      {
+        execute_permutation_without_repetitions(trials, tests);
+        break;
+      }
+    default:
+      {
+        execute_dummy(trials, tests);
+        break;
+      }
+  }
+}
+
 static void safe_main(int arg_count, char* arg_value[])
 {
   std::deque<std::string> command_line{};
@@ -176,8 +272,10 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  std::cout << "You have " << peanuts::Fuzzer::instance().tests().size() << " fuzztests" << std::endl;
-  peanuts::Fuzzer::instance().execute(application.trials, application.combinatorial, application.size);
+  std::vector<peanuts::Fuzzer::Test> tests = peanuts::Fuzzer::instance().tests();
+
+  std::cout << "You have " << tests.size() << " fuzztests" << std::endl;
+  execute(application.trials, tests, application.combinatorial, application.size);
 }
 
 int main(int arg_count, char* arg_value[])

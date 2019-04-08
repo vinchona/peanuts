@@ -32,17 +32,6 @@ struct Fuzzer
   int add(Test test);
   std::vector<Test> tests();
 
-  enum struct Combinatorial
-  {
-    random,
-    combination_with_repetitions,
-    combination_without_repetitions,
-    permutation_with_repetitions,
-    permutation_without_repetitions,
-  };
-
-  void execute(size_t trials, Combinatorial combinatorial, size_t size);
-
 private:
   struct Implementation;
   std::unique_ptr<Implementation> implementation;
