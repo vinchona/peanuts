@@ -1,4 +1,4 @@
-#include "fuzzer.hpp"
+#include <registrant.hpp>
 #include <cstdlib>
 #include <climits>
 #include <deque>
@@ -59,7 +59,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
     if (command == "--registered")
     {
-      auto tests = peanuts::Fuzzer::instance().tests();
+      auto tests = peanuts::Registrant<peanuts::Args>::instance().tests;
       std::cout << tests.size() << " tests registered:" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
@@ -175,7 +175,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
   return application;
 }
 
-static void safe_execution(std::vector<peanuts::Fuzzer::Test> tests, size_t size, char const* data)
+static void safe_execution(std::vector<peanuts::Registrant<peanuts::Args>::Test> tests, size_t size, char const* data)
 {
   size_t number = 0;
   for (auto const& test : tests)
@@ -183,7 +183,8 @@ static void safe_execution(std::vector<peanuts::Fuzzer::Test> tests, size_t size
     std::cout << "[" << number++ << "]: " << test.description << std::endl;
     try
     {
-      test.function(size, data);
+      peanuts::Args args{size, data};
+      test.function(args);
     }
     catch (std::exception const& exception)
     {
@@ -192,13 +193,13 @@ static void safe_execution(std::vector<peanuts::Fuzzer::Test> tests, size_t size
   }
 }
 
-static void execute_dummy(size_t trials, std::vector<peanuts::Fuzzer::Test> tests)
+static void execute_dummy(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests)
 {
   for (size_t trial = 0; trial < trials; trial++)
     safe_execution(tests, 0, nullptr);
 }
 
-static void execute_random(size_t trials, std::vector<peanuts::Fuzzer::Test> tests, size_t size)
+static void execute_random(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests, size_t size)
 {
   std::mt19937 generator{size};
   std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
@@ -213,15 +214,15 @@ static void execute_random(size_t trials, std::vector<peanuts::Fuzzer::Test> tes
   }
 }
 
-static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests) { execute_dummy(trials, tests); }
 
-static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests) { execute_dummy(trials, tests); }
 
-static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests) { execute_dummy(trials, tests); }
 
-static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Fuzzer::Test> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests) { execute_dummy(trials, tests); }
 
-static void execute(size_t trials, std::vector<peanuts::Fuzzer::Test> tests, Application::Combinatorial combinatorial, size_t size)
+static void execute(size_t trials, std::vector<peanuts::Registrant<peanuts::Args>::Test> tests, Application::Combinatorial combinatorial, size_t size)
 {
   switch (combinatorial)
   {
@@ -272,10 +273,15 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  std::vector<peanuts::Fuzzer::Test> tests = peanuts::Fuzzer::instance().tests();
+  auto tests = peanuts::Registrant<peanuts::Args>::instance().tests;
 
   std::cout << "You have " << tests.size() << " fuzztests" << std::endl;
   execute(application.trials, tests, application.combinatorial, application.size);
+}
+
+void testfuzz(peanuts::Args args)
+{
+  (void)args;
 }
 
 int main(int arg_count, char* arg_value[])

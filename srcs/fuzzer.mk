@@ -6,7 +6,6 @@ FUZZER_TARGET:=$(FUZZER_NAME:%.exe=%)
 
 FUZZER_SRCS:=\
 	$(this.fuzzer)/fuzzer.cpp\
-	$(this.fuzzer)/peanuts.cpp\
 	$(this.fuzzer)/example.cpp\
 
 FUZZER_OBJS:=\

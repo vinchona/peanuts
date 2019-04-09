@@ -4,7 +4,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <tester.hpp>
+#include <registrant.hpp>
 
 struct Application
 {
@@ -38,7 +38,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
     if (command == "--registered")
     {
-      auto tests = peanuts::Tester::instance().tests();
+      auto tests = peanuts::Registrant<peanuts::Void>::instance().tests;
       std::cout << tests.size() << " tests registered:" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
@@ -91,7 +91,7 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  auto tests = peanuts::Tester::instance().tests();
+  auto tests = peanuts::Registrant<peanuts::Void>::instance().tests;
   if (!application.tests.empty())
   {
     for (auto const& test : application.tests)
@@ -108,7 +108,8 @@ static void safe_main(int arg_count, char* arg_value[])
   for (auto const& test : tests)
   {
     std::cout << "[" << number++ << "]: " << test.description << std::endl;
-    test.function();
+    peanuts::Void no_args{};
+    test.function(no_args);
   }
 }
 

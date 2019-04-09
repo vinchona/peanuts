@@ -6,7 +6,6 @@ TESTER_TARGET:=$(TESTER_NAME:%.exe=%)
 
 TESTER_SRCS:=\
 	$(this.tester)/tester.cpp\
-	$(this.tester)/peanuts.cpp\
 	$(this.tester)/example.cpp\
 
 TESTER_OBJS:=\
