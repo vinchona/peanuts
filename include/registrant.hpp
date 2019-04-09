@@ -30,6 +30,8 @@ struct Registrant
   };
 
   std::vector<Test> tests;
+private:
+  Registrant() = default;
 };
 
 } // namespace peanuts
