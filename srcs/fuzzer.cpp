@@ -278,9 +278,8 @@ static void safe_main(int arg_count, char* arg_value[])
   execute(application.trials, tests, application.combinatorial, application.size);
 }
 
-void testfuzz(size_t, char const* args)
+void testfuzz(size_t, char const*)
 {
-  (void)args;
 }
 
 int main(int arg_count, char* arg_value[])
