@@ -9,18 +9,7 @@
 
 namespace peanuts
 {
-
-struct Void
-{
-};
-
-struct Args
-{
-  size_t size;
-  char const* data;
-};
-
-template<class Args>
+template<typename... Args>
 struct Registrant
 {
   Registrant(Registrant const&) = delete;
@@ -29,14 +18,14 @@ struct Registrant
   Registrant& operator=(Registrant&&) = delete;
   static auto& instance()
   {
-    static peanuts::Registrant<Args> registrant{};
+    static peanuts::Registrant<Args...> registrant{};
     return registrant;
   }
 
   class Test
   {
     public:
-    std::function<void(Args)> function;
+    std::function<void(Args...)> function;
     char const* description;
   };
 
