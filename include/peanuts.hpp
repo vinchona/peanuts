@@ -5,7 +5,6 @@
 
 #include <registrant.hpp>
 
-
 #define PEANUTS_CONCATENATES2(a, b) a##b
 #define PEANUTS_CONCATENATES(a, b) PEANUTS_CONCATENATES2(a, b)
 
