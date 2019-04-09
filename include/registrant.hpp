@@ -23,9 +23,8 @@ struct Registrant
     return registrant;
   }
 
-  class Test
+  struct Test
   {
-    public:
     std::function<void(Args...)> function;
     char const* description;
   };
