@@ -1,12 +1,12 @@
-#include <registrant.hpp>
-#include <cstdlib>
 #include <climits>
+#include <cstdlib>
 #include <deque>
 #include <iostream>
+#include <random>
+#include <registrant.hpp>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <random>
 #include <vector>
 
 struct Application
@@ -158,11 +158,11 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
       std::cout << "Unknown combinatorial: " << combinatorial << std::endl;
       std::cout << "Known value:" << std::endl
-        << "  - random (default)" << std::endl
-        << "  - combination_with_repetitions" << std::endl
-        << "  - combination_without_repetitions" << std::endl
-        << "  - permutation_with_repetitions" << std::endl
-        << "  - permutation_without_repetitions" << std::endl;
+                << "  - random (default)" << std::endl
+                << "  - combination_with_repetitions" << std::endl
+                << "  - combination_without_repetitions" << std::endl
+                << "  - permutation_with_repetitions" << std::endl
+                << "  - permutation_without_repetitions" << std::endl;
       application.exit = true;
       return application;
     }
@@ -212,48 +212,63 @@ static void execute_random(size_t trials, std::vector<peanuts::Test<size_t, char
   }
 }
 
-static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
+static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
+{
+  execute_dummy(trials, tests);
+}
 
-static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
+static void execute_combination_without_repetitions(size_t trials,
+                                                    std::vector<peanuts::Test<size_t, char const*>> tests)
+{
+  execute_dummy(trials, tests);
+}
 
-static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
+{
+  execute_dummy(trials, tests);
+}
 
-static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_without_repetitions(size_t trials,
+                                                    std::vector<peanuts::Test<size_t, char const*>> tests)
+{
+  execute_dummy(trials, tests);
+}
 
-static void execute(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests, Application::Combinatorial combinatorial, size_t size)
+static void execute(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests,
+                    Application::Combinatorial combinatorial, size_t size)
 {
   switch (combinatorial)
   {
-    case Application::Combinatorial::random:
-      {
-        execute_random(trials, tests, size);
-        break;
-      }
-    case Application::Combinatorial::combination_with_repetitions:
-      {
-        execute_combination_with_repetitions(trials, tests);
-        break;
-      }
-    case Application::Combinatorial::combination_without_repetitions:
-      {
-        execute_combination_without_repetitions(trials, tests);
-        break;
-      }
-    case Application::Combinatorial::permutation_with_repetitions:
-      {
-        execute_permutation_with_repetitions(trials, tests);
-        break;
-      }
-    case Application::Combinatorial::permutation_without_repetitions:
-      {
-        execute_permutation_without_repetitions(trials, tests);
-        break;
-      }
-    default:
-      {
-        execute_dummy(trials, tests);
-        break;
-      }
+  case Application::Combinatorial::random:
+  {
+    execute_random(trials, tests, size);
+    break;
+  }
+  case Application::Combinatorial::combination_with_repetitions:
+  {
+    execute_combination_with_repetitions(trials, tests);
+    break;
+  }
+  case Application::Combinatorial::combination_without_repetitions:
+  {
+    execute_combination_without_repetitions(trials, tests);
+    break;
+  }
+  case Application::Combinatorial::permutation_with_repetitions:
+  {
+    execute_permutation_with_repetitions(trials, tests);
+    break;
+  }
+  case Application::Combinatorial::permutation_without_repetitions:
+  {
+    execute_permutation_without_repetitions(trials, tests);
+    break;
+  }
+  default:
+  {
+    execute_dummy(trials, tests);
+    break;
+  }
   }
 }
 
@@ -277,9 +292,7 @@ static void safe_main(int arg_count, char* arg_value[])
   execute(application.trials, tests, application.combinatorial, application.size);
 }
 
-void testfuzz(size_t, char const*)
-{
-}
+void testfuzz(size_t, char const*) {}
 
 int main(int arg_count, char* arg_value[])
 {

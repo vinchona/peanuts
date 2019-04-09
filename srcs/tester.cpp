@@ -1,10 +1,10 @@
 #include <cstdlib>
 #include <deque>
 #include <iostream>
+#include <registrant.hpp>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <registrant.hpp>
 
 struct Application
 {

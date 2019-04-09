@@ -9,15 +9,13 @@
 namespace peanuts
 {
 
-template<typename... Args>
-struct Test
+template <typename... Args> struct Test
 {
   std::function<void(Args...)> function;
   char const* description;
 };
 
-template<class T>
-struct Registrant
+template <class T> struct Registrant
 {
   ~Registrant() = default;
   Registrant(Registrant const&) = delete;
@@ -30,7 +28,7 @@ struct Registrant
     return registrant;
   }
 
-   std::vector<T> registered;
+  std::vector<T> registered;
 
 private:
   Registrant() = default;
