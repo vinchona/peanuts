@@ -12,6 +12,7 @@ namespace peanuts
 template<typename... Args>
 struct Registrant
 {
+  ~Registrant() = default;
   Registrant(Registrant const&) = delete;
   Registrant& operator=(Registrant const&) = delete;
   Registrant(Registrant&&) = delete;
@@ -30,6 +31,7 @@ struct Registrant
   };
 
   std::vector<Test> tests;
+
 private:
   Registrant() = default;
 };
