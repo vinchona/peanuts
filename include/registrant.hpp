@@ -4,7 +4,6 @@
 #define REGISTRANT_HPP
 
 #include <functional>
-#include <memory>
 #include <vector>
 
 namespace peanuts
