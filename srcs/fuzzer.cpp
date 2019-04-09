@@ -171,7 +171,6 @@ static Application parse_command_line(std::deque<std::string> command_line)
     application.exit = true;
     return application;
   }
-  application.exit = false;
   return application;
 }
 
