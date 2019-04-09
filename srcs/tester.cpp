@@ -38,7 +38,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
     if (command == "--registered")
     {
-      auto tests = peanuts::Registrant<>::instance().tests;
+      auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
       std::cout << tests.size() << " tests registered:" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
@@ -90,7 +90,7 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  auto tests = peanuts::Registrant<>::instance().tests;
+  auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
   if (!application.tests.empty())
   {
     for (auto const& test : application.tests)

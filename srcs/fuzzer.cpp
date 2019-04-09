@@ -59,7 +59,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
 
     if (command == "--registered")
     {
-      auto tests = peanuts::Registrant<size_t, char const*>::instance().tests;
+      auto tests = peanuts::Registrant<peanuts::Test<size_t, char const*>>::instance().registered;
       std::cout << tests.size() << " tests registered:" << std::endl;
       std::cout << "--" << std::endl;
       size_t number = 0;
@@ -174,7 +174,7 @@ static Application parse_command_line(std::deque<std::string> command_line)
   return application;
 }
 
-static void safe_execution(std::vector<peanuts::Registrant<size_t, char const*>::Test> tests, size_t size, char const* data)
+static void safe_execution(std::vector<peanuts::Test<size_t, char const*>> tests, size_t size, char const* data)
 {
   size_t number = 0;
   for (auto const& test : tests)
@@ -191,13 +191,13 @@ static void safe_execution(std::vector<peanuts::Registrant<size_t, char const*>:
   }
 }
 
-static void execute_dummy(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests)
+static void execute_dummy(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
   for (size_t trial = 0; trial < trials; trial++)
     safe_execution(tests, 0, nullptr);
 }
 
-static void execute_random(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests, size_t size)
+static void execute_random(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests, size_t size)
 {
   std::mt19937 generator{size};
   std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
@@ -212,15 +212,15 @@ static void execute_random(size_t trials, std::vector<peanuts::Registrant<size_t
   }
 }
 
-static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests) { execute_dummy(trials, tests); }
+static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
 
-static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests) { execute_dummy(trials, tests); }
+static void execute_combination_without_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
 
-static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
 
-static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests) { execute_dummy(trials, tests); }
+static void execute_permutation_without_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests) { execute_dummy(trials, tests); }
 
-static void execute(size_t trials, std::vector<peanuts::Registrant<size_t, char const*>::Test> tests, Application::Combinatorial combinatorial, size_t size)
+static void execute(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests, Application::Combinatorial combinatorial, size_t size)
 {
   switch (combinatorial)
   {
@@ -271,7 +271,7 @@ static void safe_main(int arg_count, char* arg_value[])
   if (application.exit)
     return;
 
-  auto tests = peanuts::Registrant<size_t, char const*>::instance().tests;
+  auto tests = peanuts::Registrant<peanuts::Test<size_t, char const*>>::instance().registered;
 
   std::cout << "You have " << tests.size() << " fuzztests" << std::endl;
   execute(application.trials, tests, application.combinatorial, application.size);

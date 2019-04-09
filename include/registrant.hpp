@@ -8,7 +8,15 @@
 
 namespace peanuts
 {
+
 template<typename... Args>
+struct Test
+{
+  std::function<void(Args...)> function;
+  char const* description;
+};
+
+template<class T>
 struct Registrant
 {
   ~Registrant() = default;
@@ -18,17 +26,11 @@ struct Registrant
   Registrant& operator=(Registrant&&) = delete;
   static auto& instance()
   {
-    static peanuts::Registrant<Args...> registrant{};
+    static peanuts::Registrant<T> registrant{};
     return registrant;
   }
 
-  struct Test
-  {
-    std::function<void(Args...)> function;
-    char const* description;
-  };
-
-  std::vector<Test> tests;
+   std::vector<T> registered;
 
 private:
   Registrant() = default;
