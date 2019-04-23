@@ -17,7 +17,6 @@ template <typename... Args> struct Test
 
 template <class T> struct Registrant
 {
-  ~Registrant() = default;
   Registrant(Registrant const&) = delete;
   Registrant& operator=(Registrant const&) = delete;
   Registrant(Registrant&&) = delete;
@@ -32,6 +31,7 @@ template <class T> struct Registrant
 
 private:
   Registrant() = default;
+  ~Registrant() = default;
 };
 
 } // namespace peanuts
