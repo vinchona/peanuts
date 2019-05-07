@@ -1,4 +1,5 @@
 VERBOSE?=0
+BIN?=bin
 
 ifeq ($(VERBOSE),0)
 	QUIET=@
@@ -38,3 +39,8 @@ $(BIN)/%.so:
 
 # Dependency generation
 include $(shell test -d $(BIN) && find $(BIN) -name "*.deps")
+
+.PHONY: clean
+clean:
+	$(QUIET)rm -rf $(BIN)
+	@echo "Cleaning $(BIN)"

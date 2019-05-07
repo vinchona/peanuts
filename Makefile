@@ -20,9 +20,4 @@ CFLAGS+=-Wextra
 CFLAGS+=-Werror
 CFLAGS+=-pedantic-errors
 
-.PHONY: clean
-clean:
-	$(QUIET)rm -rf $(BIN)
-	@echo "Cleaning $(BIN)"
-
 true_all: $(TARGETS)
