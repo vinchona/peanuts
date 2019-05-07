@@ -5,8 +5,8 @@ TESTER_NAME:=tester.exe
 TESTER_TARGET:=$(TESTER_NAME:%.exe=%)
 
 TESTER_SRCS:=\
-	$(this.tester)/tester.cpp\
-	$(this.tester)/example.cpp\
+	$(this.tester)/srcs/tester.cpp\
+	$(this.tester)/srcs/example.cpp\
 
 TESTER_OBJS:=\
 	$(TESTER_SRCS:%=$(BIN)/%.o)

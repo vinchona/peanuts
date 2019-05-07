@@ -8,12 +8,11 @@ all: true_all
 
 BIN?=bin
 
-SRCS:=$(this)/srcs
 INCLUDE:=$(this)/include
 
 include $(this)/build.mk
-include $(this)/$(SRCS)/tester.mk
-include $(this)/$(SRCS)/fuzzer.mk
+include $(this)/tester.mk
+include $(this)/fuzzer.mk
 
 CFLAGS+=-Wall
 CFLAGS+=-Wextra

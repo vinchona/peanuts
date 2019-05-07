@@ -5,8 +5,8 @@ FUZZER_NAME:=fuzzer.exe
 FUZZER_TARGET:=$(FUZZER_NAME:%.exe=%)
 
 FUZZER_SRCS:=\
-	$(this.fuzzer)/fuzzer.cpp\
-	$(this.fuzzer)/example.cpp\
+	$(this.fuzzer)/srcs/fuzzer.cpp\
+	$(this.fuzzer)/srcs/example.cpp\
 
 FUZZER_OBJS:=\
 	$(FUZZER_SRCS:%=$(BIN)/%.o)
