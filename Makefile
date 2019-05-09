@@ -21,6 +21,7 @@ PEANUTS_TESTER_APP_TARGET:=$(PEANUTS_TESTER_APP_NAME:%.exe=%)
 PEANUTS_TESTER_APP_SRCS:=\
   $(PEANUTS_TESTER_SRCS)\
   $(this)/srcs/example.cpp\
+  $(this)/srcs/command-line.cpp\
 
 PEANUTS_TESTER_APP_OBJS:=\
   $(PEANUTS_TESTER_APP_SRCS:%=$(BIN)/%.o)
@@ -45,6 +46,7 @@ PEANUTS_FUZZER_APP_TARGET:=$(PEANUTS_FUZZER_APP_NAME:%.exe=%)
 PEANUTS_FUZZER_APP_SRCS:=\
   $(PEANUTS_FUZZER_SRCS)\
   $(this)/srcs/example.cpp\
+  $(this)/srcs/command-line.cpp\
 
 PEANUTS_FUZZER_APP_OBJS:=\
   $(PEANUTS_FUZZER_APP_SRCS:%=$(BIN)/%.o)
