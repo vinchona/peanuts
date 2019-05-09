@@ -21,11 +21,11 @@ namespace peanuts
     CommandLine(CommandLine &&);
     CommandLine& operator=(CommandLine &&);
 
-    void add_int_command(std::string name, std::string description, int &value) ;
-    void add_string_command(std::string name, std::string description, std::string &value) ;
-    void add_flag_command(std::string name, std::string description, bool &value, bool flag) ;
+    void add_int_command(std::string name, std::string description, int &value);
+    void add_string_command(std::string name, std::string description, std::string &value);
+    void add_flag_command(std::string name, std::string description, bool &value, bool flag);
     void add_user_command(std::string name, std::string description,
-        std::function<void(std::queue<std::string> &line)> parse) ;
+        std::function<void(std::queue<std::string> &line)> parse);
     void usage(std::ostream &stream) const;
     void parse(std::queue<std::string> &line) const;
 
