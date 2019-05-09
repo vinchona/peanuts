@@ -8,7 +8,7 @@ all: true_all
 
 BIN?=bin
 
-INCLUDE:=$(this)/include
+INCLUDE:=$(this)/includes
 
 include $(this)/build.mk
 include $(this)/tester.mk
