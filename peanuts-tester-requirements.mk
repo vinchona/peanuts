@@ -6,4 +6,4 @@ PEANUTS_TESTER_SRCS:=\
 	$(this.peanuts-tester-requirements)/srcs/tester.cpp\
 
 PEANUTS_TESTER_INCLUDES:=\
-	-I$(this.peanuts-tester-requirements)/includes
+	$(this.peanuts-tester-requirements)/includes

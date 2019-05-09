@@ -6,4 +6,4 @@ PEANUTS_FUZZER_SRCS:=\
 	$(this.peanuts-fuzzer-requirements)/srcs/fuzzer.cpp\
 
 PEANUTS_FUZZER_INCLUDES:=\
-	-I$(this.peanuts-fuzzer-requirements)/includes
+	$(this.peanuts-fuzzer-requirements)/includes
