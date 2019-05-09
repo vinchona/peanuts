@@ -1,6 +1,4 @@
-define get-my-dir
-$(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
-endef
+include utils.mk
 
 this:=$(call get-my-dir)
 
