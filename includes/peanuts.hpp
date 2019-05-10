@@ -32,4 +32,7 @@
 #define PEANUTS_TEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
 #define PEANUTS_FUZZ(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
 
+#define PEANUTS_ASSERT_IS_EQUAL(expected, actual) peanuts::Validator::is_equal(expected, actual)
+#define PEANUTS_ASSERT_IS_NOT_EQUAL(expected, actual) peanuts::Validator::is_not_equal(expected, actual)
+
 #endif /* __PEANUTS__ */
