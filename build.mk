@@ -1,5 +1,7 @@
 VERBOSE?=0
 BIN?=bin
+VERSION?=0.0.0
+MAJOR?=0
 
 ifeq ($(VERBOSE),0)
 	QUIET=@
