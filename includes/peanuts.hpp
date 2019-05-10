@@ -5,6 +5,7 @@
 
 #include <registrant.hpp>
 #include <validator.hpp>
+#include <cstdlib>
 
 #define PEANUTS_CONCATENATES2(a, b) a##b
 #define PEANUTS_CONCATENATES(a, b) PEANUTS_CONCATENATES2(a, b)
@@ -32,7 +33,20 @@
 #define PEANUTS_TEST(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_UNITTEST(description, __LINE__)
 #define PEANUTS_FUZZ(description) PEANUTS_DECLARE_AND_MAKE_UNIQUE_FUZZTEST(description, __LINE__)
 
-#define PEANUTS_ASSERT_IS_EQUAL(expected, actual) peanuts::Validator::is_equal(expected, actual)
-#define PEANUTS_ASSERT_IS_NOT_EQUAL(expected, actual) peanuts::Validator::is_not_equal(expected, actual)
+#define PEANUTS_IS_EQUAL_OR_ABORT(expected, actual) \
+  do \
+{ \
+  if(!peanuts::Validator::is_equal(expected, actual)) \
+  ::abort(); \
+} while(0)
+
+
+#define PEANUTS_IS_NOT_EQUAL_OR_ABORT(expected, actual) \
+  do \
+{ \
+  if(!peanuts::Validator::is_not_equal(expected, actual)) \
+  ::abort(); \
+} while(0)
+
 
 #endif /* __PEANUTS__ */
