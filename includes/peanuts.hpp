@@ -39,7 +39,7 @@
 { \
   if(!peanuts::Validator::is_equal(expected, actual)) \
   {\
-    std::cerr << "[" file << ":" << line << "] error: '" << actual_name << "' (" << actual << ")" << " is not equals to '"<< expected << "'" << std::endl; \
+    std::cerr << "[" file << ":" << line << "] error: "<< actual_name << " '" << actual << "' is not equals to '"<< expected << "'" << std::endl; \
     ::abort(); \
   }\
 } while(0)
@@ -52,7 +52,7 @@
 { \
   if(!peanuts::Validator::is_not_equal(expected, actual)) \
   {\
-    std::cerr << "[" file << ":" << line << "] error: '" << actual_name << "' (" << actual << ")" << " is equals to '"<< expected << "'" << std::endl; \
+    std::cerr << "[" file << ":" << line << "] error: " << actual_name << " '" << actual << "' is equals to '"<< expected << "'" << std::endl; \
     ::abort(); \
   }\
 } while(0)
