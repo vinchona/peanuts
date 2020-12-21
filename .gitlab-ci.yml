@@ -8,13 +8,13 @@ image: gcc
 # Build
 build:
   stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   before_script:
     - apt-get update
     - apt-get upgrade -y
     - apt-get install -y make
   script:
-    - git submodule init
-    - git submodule update
     - make BIN=bin
   artifacts:
     paths:
