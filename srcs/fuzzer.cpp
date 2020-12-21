@@ -42,8 +42,8 @@ static bool parse_command_line(int arg_count, char* arg_value[], Application& ap
   command_line.add_int_command("--trials", "Number of trials (default: 1)", application.trials);
   command_line.add_string_command(
       "--combinatorial",
-      "Type of fuzzing: 'random', 'combination_with_repetitions', 'combination_without_repetitions', "
-      "'permutation_with_repetitions', 'permutation_without_repetitions' (default: 'random')",
+      "Type of fuzzing: 'random', 'combinations_with_repetition', 'combinations_without_repetition', "
+      "'permutations_with_repetition', 'permutations_without_repetition' (default: 'random')",
       application.combinatorial);
   queue<string> line{};
 
@@ -108,22 +108,22 @@ static void execute_random(int trials, vector<peanuts::Test<size_t, char const*>
   }
 }
 
-static void execute_combination_with_repetitions(int trials, vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_combinations_with_repetition(int trials, vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_combination_without_repetitions(int trials, vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_combinations_without_repetition(int trials, vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_permutation_with_repetitions(int trials, vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_permutations_with_repetition(int trials, vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_permutation_without_repetitions(int trials, vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_permutations_without_repetition(int trials, vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
@@ -132,14 +132,14 @@ static void execute(int trials, vector<peanuts::Test<size_t, char const*>> tests
 {
   if (combinatorial == "random")
     return execute_random(trials, tests, size);
-  if (combinatorial == "combination_with_repetitions")
-    return execute_combination_with_repetitions(trials, tests);
-  if (combinatorial == "combination_without_repetitions")
-    return execute_combination_without_repetitions(trials, tests);
-  if (combinatorial == "permutation_with_repetitions")
-    return execute_permutation_with_repetitions(trials, tests);
-  if (combinatorial == "permutation_without_repetitions")
-    return execute_permutation_without_repetitions(trials, tests);
+  if (combinatorial == "combinations_with_repetition")
+    return execute_combinations_with_repetition(trials, tests);
+  if (combinatorial == "combinations_without_repetition")
+    return execute_combinations_without_repetition(trials, tests);
+  if (combinatorial == "permutations_with_repetition")
+    return execute_permutations_with_repetition(trials, tests);
+  if (combinatorial == "permutations_without_repetition")
+    return execute_permutations_without_repetition(trials, tests);
 
   return execute_dummy(trials, tests);
 }
