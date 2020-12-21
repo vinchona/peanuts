@@ -1,0 +1,3 @@
+[submodule "third-parties/carryall"]
+	path = third-parties/carryall
+	url = git@gitlab.com:kimye/carryall.git
