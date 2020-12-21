@@ -1,4 +1,5 @@
 #include <climits>
+#include <command-line.hpp>
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -9,172 +10,65 @@
 #include <string>
 #include <vector>
 
+using namespace carryall;
+
 struct Application
 {
-  enum struct Combinatorial
-  {
-    random,
-    combination_with_repetitions,
-    combination_without_repetitions,
-    permutation_with_repetitions,
-    permutation_without_repetitions,
-  };
-
-  bool show_usage = false;
-  bool exit = false;
-  size_t size = 256;
-  size_t trials = 1;
-  Application::Combinatorial combinatorial = Application::Combinatorial::random;
+  int size{256};
+  int trials{1};
+  std::string combinatorial{"random"};
 };
 
-static void usage(char* name)
+static void show_registered()
 {
-  std::cout << "Usage: " << name << " [OPTION]..." << std::endl;
-  std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
-  std::cout << std::endl;
-  std::cout << "--help" << '\t' << "This help" << std::endl;
-  std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
-  std::cout << "--size" << '\t' << "Number of random characters" << std::endl;
-  std::cout << "--trials" << '\t' << "Number of trials" << std::endl;
-  std::cout << "--combinatorial" << '\t' << "Type of fuzzing:" << std::endl;
-  std::cout << '\t' << '\t' << "  - random (default)" << std::endl;
-  std::cout << '\t' << '\t' << "  - combination_with_repetitions" << std::endl;
-  std::cout << '\t' << '\t' << "  - combination_without_repetitions" << std::endl;
-  std::cout << '\t' << '\t' << "  - permutation_with_repetitions" << std::endl;
-  std::cout << '\t' << '\t' << "  - permutation_without_repetitions" << std::endl;
+  auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
+  std::cout << tests.size() << " tests registered:" << std::endl;
+  std::cout << "--" << std::endl;
+  int number = 0;
+  for (auto const& test : tests)
+    std::cout << "[" << number++ << "]: " << test.description << std::endl;
+  std::cout << "--" << std::endl;
 }
 
-static Application parse_command_line(std::deque<std::string> command_line)
+static bool parse_command_line(int arg_count, char* arg_value[], Application& application)
 {
-  Application application{};
-  while (!command_line.empty())
+  CommandLine command_line{};
+  bool help{false};
+  command_line.add_flag_command("--help", "This help", help, true);
+  bool show{false};
+  command_line.add_flag_command("--show", "Show registered tests via the 'peanuts' API", show, true);
+  command_line.add_int_command("--size", "Number of random characters", (int&)application.size);
+  command_line.add_int_command("--trials", "Number of trials", (int&)application.trials);
+  command_line.add_string_command(
+      "--combinatorial",
+      "Type of fuzzing: 'random', 'combination_with_repetitions', 'combination_without_repetitions', "
+      "'permutation_with_repetitions', 'permutation_without_repetitions' (default: 'random')",
+      application.combinatorial);
+  std::queue<std::string> line{};
+
+  for (int i = 1; i < arg_count; ++i)
+    line.push(arg_value[i]);
+
+  command_line.parse(line);
+
+  if (help)
   {
-    auto const command = command_line.front();
-    if (command == "--help")
-    {
-      application.show_usage = true;
-      application.exit = true;
-      return application;
-    }
-
-    if (command == "--registered")
-    {
-      auto tests = peanuts::Registrant<peanuts::Test<size_t, char const*>>::instance().registered;
-      std::cout << tests.size() << " tests registered:" << std::endl;
-      std::cout << "--" << std::endl;
-      size_t number = 0;
-      for (auto const& test : tests)
-        std::cout << "[" << number++ << "]: " << test.description << std::endl;
-      std::cout << "--" << std::endl;
-      application.exit = true;
-      return application;
-    }
-
-    if (command == "--size")
-    {
-      command_line.pop_front();
-      if (command_line.empty())
-      {
-        std::cout << "Missing argument to '" << command << "'" << std::endl;
-        application.exit = true;
-        return application;
-      }
-
-      std::stringstream ss{command_line.front()};
-      ss.unsetf(std::ios::dec);
-      ss.unsetf(std::ios::hex);
-      size_t size;
-      ss >> size;
-      application.size = size;
-      command_line.pop_front();
-      continue;
-    }
-
-    if (command == "--trials")
-    {
-      command_line.pop_front();
-      if (command_line.empty())
-      {
-        std::cout << "Missing argument to '" << command << "'" << std::endl;
-        application.exit = true;
-        return application;
-      }
-
-      std::stringstream ss{command_line.front()};
-      ss.unsetf(std::ios::dec);
-      ss.unsetf(std::ios::hex);
-      size_t trials;
-      ss >> trials;
-      application.trials = trials;
-      command_line.pop_front();
-      continue;
-    }
-
-    if (command == "--combinatorial")
-    {
-      command_line.pop_front();
-      if (command_line.empty())
-      {
-        std::cout << "Missing argument to '" << command << "'" << std::endl;
-        application.exit = true;
-        return application;
-      }
-
-      std::string combinatorial{command_line.front()};
-      if (combinatorial == "random")
-      {
-        application.combinatorial = Application::Combinatorial::random;
-        command_line.pop_front();
-        continue;
-      }
-
-      if (combinatorial == "combination_with_repetitions")
-      {
-        application.combinatorial = Application::Combinatorial::combination_with_repetitions;
-        command_line.pop_front();
-        continue;
-      }
-
-      if (combinatorial == "combination_without_repetitions")
-      {
-        application.combinatorial = Application::Combinatorial::combination_without_repetitions;
-        command_line.pop_front();
-        continue;
-      }
-
-      if (combinatorial == "permutation_with_repetitions")
-      {
-        application.combinatorial = Application::Combinatorial::permutation_with_repetitions;
-        command_line.pop_front();
-        continue;
-      }
-
-      if (combinatorial == "permutation_without_repetitions")
-      {
-        application.combinatorial = Application::Combinatorial::permutation_without_repetitions;
-        command_line.pop_front();
-        continue;
-      }
-
-      std::cout << "Unknown combinatorial: " << combinatorial << std::endl;
-      std::cout << "Known value:" << std::endl
-                << "  - random (default)" << std::endl
-                << "  - combination_with_repetitions" << std::endl
-                << "  - combination_without_repetitions" << std::endl
-                << "  - permutation_with_repetitions" << std::endl
-                << "  - permutation_without_repetitions" << std::endl;
-      application.exit = true;
-      return application;
-    }
-
-    std::cout << "Unknown command: " << command << std::endl;
-    application.exit = true;
-    return application;
+    std::cout << "Usage: " << arg_value[0] << " [OPTION]..." << std::endl;
+    std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
+    command_line.usage(std::cout);
+    return false;
   }
-  return application;
+
+  if (show)
+  {
+    show_registered();
+    return false;
+  }
+
+  return true;
 }
 
-static void safe_execution(std::vector<peanuts::Test<size_t, char const*>> tests, size_t size, char const* data)
+static void safe_execution(std::vector<peanuts::Test<size_t, char const*>> tests, int size, char const* data)
 {
   size_t number = 0;
   for (auto const& test : tests)
@@ -191,103 +85,74 @@ static void safe_execution(std::vector<peanuts::Test<size_t, char const*>> tests
   }
 }
 
-static void execute_dummy(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_dummy(int trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
-  for (size_t trial = 0; trial < trials; trial++)
+  for (int trial = 0; trial < trials; trial++)
     safe_execution(tests, 0, nullptr);
 }
 
-static void execute_random(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests, size_t size)
+static void execute_random(int trials, std::vector<peanuts::Test<size_t, char const*>> tests, int size)
 {
-  std::mt19937 generator{size};
+  int seed{size};
+  std::mt19937 generator{seed};
   std::uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
-  for (size_t trial = 0; trial < trials; trial++)
+  for (int trial = 0; trial < trials; trial++)
   {
     std::cout << "Trial: " << trial << std::endl;
     std::string data{};
-    for (size_t character = 0; character < size; character++)
+    for (int character = 0; character < size; character++)
       data += std::string{distribution(generator)};
 
     safe_execution(tests, data.size(), data.c_str());
   }
 }
 
-static void execute_combination_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_combination_with_repetitions(int trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_combination_without_repetitions(size_t trials,
-                                                    std::vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_combination_without_repetitions(int trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_permutation_with_repetitions(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_permutation_with_repetitions(int trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute_permutation_without_repetitions(size_t trials,
-                                                    std::vector<peanuts::Test<size_t, char const*>> tests)
+static void execute_permutation_without_repetitions(int trials, std::vector<peanuts::Test<size_t, char const*>> tests)
 {
   execute_dummy(trials, tests);
 }
 
-static void execute(size_t trials, std::vector<peanuts::Test<size_t, char const*>> tests,
-                    Application::Combinatorial combinatorial, size_t size)
+static void execute(int trials, std::vector<peanuts::Test<size_t, char const*>> tests, std::string combinatorial,
+                    int size)
 {
-  switch (combinatorial)
-  {
-  case Application::Combinatorial::random:
-  {
-    execute_random(trials, tests, size);
-    break;
-  }
-  case Application::Combinatorial::combination_with_repetitions:
-  {
-    execute_combination_with_repetitions(trials, tests);
-    break;
-  }
-  case Application::Combinatorial::combination_without_repetitions:
-  {
-    execute_combination_without_repetitions(trials, tests);
-    break;
-  }
-  case Application::Combinatorial::permutation_with_repetitions:
-  {
-    execute_permutation_with_repetitions(trials, tests);
-    break;
-  }
-  case Application::Combinatorial::permutation_without_repetitions:
-  {
-    execute_permutation_without_repetitions(trials, tests);
-    break;
-  }
-  default:
-  {
-    execute_dummy(trials, tests);
-    break;
-  }
-  }
+  if (combinatorial == "random")
+    return execute_random(trials, tests, size);
+  if (combinatorial == "combination_with_repetitions")
+    return execute_combination_with_repetitions(trials, tests);
+  if (combinatorial == "combination_without_repetitions")
+    return execute_combination_without_repetitions(trials, tests);
+  if (combinatorial == "permutation_with_repetitions")
+    return execute_permutation_with_repetitions(trials, tests);
+  if (combinatorial == "permutation_without_repetitions")
+    return execute_permutation_without_repetitions(trials, tests);
+
+  return execute_dummy(trials, tests);
 }
 
 static void safe_main(int arg_count, char* arg_value[])
 {
-  std::deque<std::string> command_line{};
+  Application application{};
 
-  for (int i = 1; i < arg_count; ++i)
-    command_line.push_back(arg_value[i]);
-
-  auto application = parse_command_line(command_line);
-  if (application.show_usage)
-    usage(arg_value[0]);
-
-  if (application.exit)
+  auto should_continue = parse_command_line(arg_count, arg_value, application);
+  if (!should_continue)
     return;
 
   auto tests = peanuts::Registrant<peanuts::Test<size_t, char const*>>::instance().registered;
-
   std::cout << "You have " << tests.size() << " fuzztests" << std::endl;
   execute(application.trials, tests, application.combinatorial, application.size);
 }
