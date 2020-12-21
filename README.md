@@ -4,7 +4,7 @@ Useful C/C++ unittest/fuzztest API
 # Getting started
 ## Prerequisites
 * make: `apt install make`
-* carryall's repository access
+* [carryall](https://gitlab.com/kimye/carryall)'s repository access
 
 ## Installation
 1. Clone the current repository: `git clone https://gitlab.com/project/kimye/peanuts.git`
