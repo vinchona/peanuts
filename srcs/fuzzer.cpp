@@ -38,8 +38,8 @@ static bool parse_command_line(int arg_count, char* arg_value[], Application& ap
   command_line.add_flag_command("--help", "This help", help, true);
   bool show{false};
   command_line.add_flag_command("--show", "Show registered tests via the 'peanuts' API", show, true);
-  command_line.add_int_command("--size", "Number of random characters", (int&)application.size);
-  command_line.add_int_command("--trials", "Number of trials", (int&)application.trials);
+  command_line.add_int_command("--size", "Number of random characters (default: 256)", application.size);
+  command_line.add_int_command("--trials", "Number of trials (default: 1)", application.trials);
   command_line.add_string_command(
       "--combinatorial",
       "Type of fuzzing: 'random', 'combination_with_repetitions', 'combination_without_repetitions', "
