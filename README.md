@@ -11,5 +11,5 @@ ToDo
 ToDo
 
 # Butter (ToDo)
-- Filled README
+- Fill README
 - Implement missing combinatorials: combinations_with_repetition, permutations_with_repetition, combinations_without_repetition, permuations_without_repetition
