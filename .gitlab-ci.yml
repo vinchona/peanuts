@@ -1,8 +1,6 @@
 # Define stages wich are to be executed
 stages:
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
 
 # Use the official gcc image, based on debian (see https://hub.docker.com/_/gcc/)
 image: gcc
@@ -25,6 +23,10 @@ build:
 
 # Test
 test:
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
   stage: run
   script:
     - ./run.sh
