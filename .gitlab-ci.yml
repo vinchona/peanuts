@@ -5,15 +5,16 @@ stages:
 # Use the official gcc image, based on debian (see https://hub.docker.com/_/gcc/)
 image: gcc
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # Build
 build:
   stage: build
-  variables:
-    GIT_SUBMODULE_STRATEGY: recursive
   before_script:
     - apt-get update
     - apt-get upgrade -y
-    - apt-get install -y make
+    - apt-get install -y make ssh
   script:
     - make BIN=bin
   artifacts:
