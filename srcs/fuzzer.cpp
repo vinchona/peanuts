@@ -94,7 +94,7 @@ static void execute_dummy(int trials, vector<peanuts::Test<size_t, char const*>>
 
 static void execute_random(int trials, vector<peanuts::Test<size_t, char const*>> tests, int size)
 {
-  int seed{size};
+  size_t seed{static_cast<size_t>(size)};
   mt19937 generator{seed};
   uniform_int_distribution<char> distribution{CHAR_MIN, CHAR_MAX};
   for (int trial = 0; trial < trials; trial++)
