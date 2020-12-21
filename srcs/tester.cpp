@@ -11,7 +11,7 @@ using namespace carryall;
 
 struct Application
 {
-  std::vector<size_t> tests{};
+  std::vector<int> tests{};
 };
 
 static void show_registered()
@@ -19,7 +19,7 @@ static void show_registered()
   auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
   std::cout << tests.size() << " tests registered:" << std::endl;
   std::cout << "--" << std::endl;
-  size_t number = 0;
+  int number = 0;
   for (auto const& test : tests)
     std::cout << "[" << number++ << "]: " << test.description << std::endl;
   std::cout << "--" << std::endl;
@@ -41,10 +41,10 @@ static bool parse_command_line(int arg_count, char* arg_value[], Application& ap
     std::stringstream ss{word};
     ss.unsetf(std::ios::dec);
     ss.unsetf(std::ios::hex);
-    size_t test;
+    int test;
     ss >> test;
     if (ss.fail() || (ss.tellg() != std::streampos(-1)))
-      throw std::runtime_error{"Expected 'size_t', got 'string': '" + word + "'"};
+      throw std::runtime_error{"Expected 'int', got 'string': '" + word + "'"};
     application.tests.push_back(test);
   };
   command_line.add_user_command("--select", "Execute selected test", select);
@@ -86,7 +86,7 @@ static void safe_main(int arg_count, char* arg_value[])
   {
     for (auto const& test : application.tests)
     {
-      if (test >= tests.size())
+      if ((size_t)test >= tests.size())
         throw std::runtime_error{std::string{"No such test: "} + std::to_string(test)};
       std::cout << "[" << test << "]: " << tests[test].description << std::endl;
       tests[test].function;
@@ -94,7 +94,7 @@ static void safe_main(int arg_count, char* arg_value[])
     return;
   }
 
-  size_t number = 0;
+  int number = 0;
   for (auto const& test : tests)
   {
     std::cout << "[" << number++ << "]: " << test.description << std::endl;

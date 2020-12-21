@@ -70,7 +70,7 @@ static bool parse_command_line(int arg_count, char* arg_value[], Application& ap
 
 static void safe_execution(std::vector<peanuts::Test<size_t, char const*>> tests, int size, char const* data)
 {
-  size_t number = 0;
+  int number = 0;
   for (auto const& test : tests)
   {
     std::cout << "[" << number++ << "]: " << test.description << std::endl;
