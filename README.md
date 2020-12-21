@@ -3,10 +3,14 @@ Useful C/C++ unittest/fuzztest API
 
 # Getting started
 ## Prerequisites
+### Mandatories
 * make: `apt install make`
 * [carryall](https://gitlab.com/kimye/carryall)'s repository access
 
-## Installation
+### Optionals
+* clang-format (version >= 8.0): `apt install clang-format-8`
+
+## Installation
 1. Clone the current repository: `git clone https://gitlab.com/project/kimye/peanuts.git`
 2. Install submodules: 
 * `git submodule sync --recursive`
