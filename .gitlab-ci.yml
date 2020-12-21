@@ -13,6 +13,8 @@ build:
     - apt-get upgrade -y
     - apt-get install -y make
   script:
+    - git submodule init
+    - git submodule update
     - make BIN=bin
   artifacts:
     paths:
