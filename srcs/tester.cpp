@@ -1,3 +1,4 @@
+#include <command-line.hpp>
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -6,91 +7,81 @@
 #include <stdexcept>
 #include <string>
 
+using namespace carryall;
+
 struct Application
 {
-  bool show_usage = false;
-  bool exit = false;
   std::vector<size_t> tests{};
 };
 
-static void usage(char* name)
+static void show_registered()
 {
-  std::cout << "Usage: " << name << " [OPTION]..." << std::endl;
-  std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
-  std::cout << std::endl;
-  std::cout << "--help" << '\t' << "This help" << std::endl;
-  std::cout << "--registered" << '\t' << "Tests registered" << std::endl;
-  std::cout << "--test" << '\t' << "Single test" << std::endl;
+  auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
+  std::cout << tests.size() << " tests registered:" << std::endl;
+  std::cout << "--" << std::endl;
+  size_t number = 0;
+  for (auto const& test : tests)
+    std::cout << "[" << number++ << "]: " << test.description << std::endl;
+  std::cout << "--" << std::endl;
 }
 
-static Application parse_command_line(std::deque<std::string> command_line)
+static bool parse_command_line(int arg_count, char* arg_value[], Application& application)
 {
-  Application application{};
-  while (!command_line.empty())
+  CommandLine command_line{};
+  bool help{false};
+  command_line.add_flag_command("--help", "This help", help, true);
+  bool show{false};
+  command_line.add_flag_command("--show", "Show registered tests via the 'peanuts' API", show, true);
+  auto select = [&application](std::queue<std::string>& line) {
+    if (line.empty())
+      throw std::runtime_error{"Unexpected end of line"};
+    auto const word = line.front();
+    line.pop();
+
+    std::stringstream ss{word};
+    ss.unsetf(std::ios::dec);
+    ss.unsetf(std::ios::hex);
+    size_t test;
+    ss >> test;
+    if (ss.fail() || (ss.tellg() != std::streampos(-1)))
+      throw std::runtime_error{"Expected 'size_t', got 'string': '" + word + "'"};
+    application.tests.push_back(test);
+  };
+  command_line.add_user_command("--select", "Execute selected test", select);
+
+  std::queue<std::string> line{};
+
+  for (int i = 1; i < arg_count; ++i)
+    line.push(arg_value[i]);
+
+  command_line.parse(line);
+
+  if (help)
   {
-    auto const command = command_line.front();
-    if (command == "--help")
-    {
-      application.show_usage = true;
-      application.exit = true;
-      return application;
-    }
-
-    if (command == "--registered")
-    {
-      auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
-      std::cout << tests.size() << " tests registered:" << std::endl;
-      std::cout << "--" << std::endl;
-      size_t number = 0;
-      for (auto const& test : tests)
-        std::cout << "[" << number++ << "]: " << test.description << std::endl;
-      std::cout << "--" << std::endl;
-      application.exit = true;
-      return application;
-    }
-
-    if (command == "--test")
-    {
-      command_line.pop_front();
-      if (command_line.empty())
-      {
-        std::cout << "Missing argument to '" << command << "'" << std::endl;
-        application.exit = true;
-        return application;
-      }
-
-      std::stringstream ss{command_line.front()};
-      ss.unsetf(std::ios::dec);
-      ss.unsetf(std::ios::hex);
-      size_t test;
-      ss >> test;
-      application.tests.push_back(test);
-      command_line.pop_front();
-      continue;
-    }
-
-    std::cout << "Unknown command: " << command << std::endl;
-    application.exit = true;
-    return application;
+    std::cout << "Usage: " << arg_value[0] << " [OPTION]..." << std::endl;
+    std::cout << "Execute tests registered via the 'peanuts' API" << std::endl;
+    command_line.usage(std::cout);
+    return false;
   }
-  return application;
+
+  if (show)
+  {
+    show_registered();
+    return false;
+  }
+
+  return true;
 }
 
 static void safe_main(int arg_count, char* arg_value[])
 {
-  std::deque<std::string> command_line{};
+  Application application{};
 
-  for (int i = 1; i < arg_count; ++i)
-    command_line.push_back(arg_value[i]);
-
-  auto application = parse_command_line(command_line);
-  if (application.show_usage)
-    usage(arg_value[0]);
-
-  if (application.exit)
+  auto should_continue = parse_command_line(arg_count, arg_value, application);
+  if (!should_continue)
     return;
 
-  auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
+  auto const tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
   if (!application.tests.empty())
   {
     for (auto const& test : application.tests)
