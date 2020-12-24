@@ -1,5 +1,5 @@
+#include "command-line.hpp"
 #include <climits>
-#include <command-line.hpp>
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -10,7 +10,6 @@
 #include <string>
 #include <vector>
 
-using namespace carryall;
 using namespace std;
 
 struct Application

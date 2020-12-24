@@ -1,4 +1,4 @@
-#include <command-line.hpp>
+#include "command-line.hpp"
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <string>
 
-using namespace carryall;
 using namespace std;
 
 struct Application
