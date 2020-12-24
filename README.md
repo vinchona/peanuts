@@ -5,7 +5,6 @@ Useful C/C++ unittest/fuzztest API
 ## Prerequisites
 ### Mandatories
 * make: `apt install make`
-* [carryall](https://gitlab.com/kimye/carryall)'s repository access and prerequisites mandatories
 
 ### Optionals
 * clang-format (version >= 8.0): `apt install clang-format-8`
