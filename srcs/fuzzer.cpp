@@ -21,7 +21,7 @@ struct Application
 
 static void show_registered()
 {
-  auto tests = peanuts::Registrant<peanuts::Test<>>::instance().registered;
+  auto tests = peanuts::Registrant<peanuts::Test<size_t, char const*>>::instance().registered;
   cout << tests.size() << " tests registered:" << endl;
   cout << "--" << endl;
   int number = 0;
