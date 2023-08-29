@@ -10,10 +10,8 @@ Useful C/C++ unittest/fuzztest API
 * clang-format (version >= 8.0): `apt install clang-format-8`
 
 ## Installation
-1. Clone the current repository: `git clone https://gitlab.com/project/kimye/peanuts.git`
+1. Clone the current repository: `git clone https://github.com/vinchona/peanuts.git`
 2. Install submodules: 
-* `git submodule sync --recursive`
-* `git submodule update --init --recursive`
 3. Build: `make`
 
 # Running the tests
